@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Manager Examens</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; line-height: 1.5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .option { background: #edf2f7; padding: 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .option:hover { border-color: #4299e1; background: #e2e8f0; }
+        .selected { background: #4299e1 !important; color: white; border-color: #2b6cb0; }
+        button { width: 100%; padding: 15px; background: #48bb78; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1em; }
+        button:hover { background: #38a169; }
+        #result-area { display: none; }
+        .error-card { border-left: 5px solid #f56565; padding: 15px; margin: 15px 0; background: #fff5f5; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="quiz-area">
+        <h3 id="counter">Vraag 1/30</h3>
+        <p id="q-text" style="font-weight:bold; font-size:1.25em; min-height: 50px;"></p>
+        <div id="options-area"></div>
+        <button onclick="handleNext()" style="margin-top:20px;">Volgende Vraag</button>
+    </div>
+    <div id="result-area">
+        <h2>Toets voltooid! Score: <span id="final-score"></span></h2>
+        <p>Hieronder zie je de begrippen die je nog moet oefenen:</p>
+        <div id="error-log"></div>
+        <button onclick="location.reload()" style="background:#4299e1;">Nieuwe Toets (30 andere vragen)</button>
+    </div>
+</div>
+
+<script>
+const fullPool = [
+    {q: "Wat is Actievoorraad?", a: ["Voorraad groter dan normaal door een verwachte actie", "Voorraad van afgeprijsde artikelen", "Voorraad die al in de winkel ligt"], c: 0},
+    {q: "Consumentenomzet is...", a: ["Omzet inclusief btw", "Omzet exclusief btw", "Winst per klant"], c: 0},
+    {q: "Wat is Cycle Counting?", a: ["Regelmatig tellen van een deel van de voorraad", "Tellen van de hele voorraad in 1 dag", "De omloopsnelheid berekenen"], c: 0},
+    {q: "Wat is Economische voorraad?", a: ["Technische voorraad + Voorinkopen - Voorverkopen", "Fysieke voorraad aanwezig", "De voorraadwaarde in euro's"], c: 0},
+    {q: "Wat is Gemiddelde voorraad?", a: ["Aantal artikelen gemiddeld op voorraad per periode", "Voorraad aan het begin van het jaar", "De minimale voorraad"], c: 0},
+    {q: "Wat is Integrale inventarisatie?", a: ["Alle artikelen in magazijn en winkel tellen", "Steekproefgewijs tellen", "Alleen dure artikelen tellen"], c: 0},
+    {q: "Wat is de Maximumvoorraad?", a: ["De voorraad die je maximaal wilt aanhouden", "De capaciteit van het magazijn", "De voorraad inclusief acties"], c: 0},
+    {q: "Wat is de Minimumvoorraad?", a: ["Voorraad nodig om klantvraag te voldoen tijdens levertijd", "Nul artikelen", "De voorraad in het schap"], c: 0},
+    {q: "Netto-omzet is...", a: ["Omzet exclusief btw", "Omzet inclusief btw", "De brutowinst"], c: 0},
+    {q: "Wat is Omzetduur?", a: ["Tijd nodig om voorraad in geld om te zetten", "Hoe lang de winkel open is", "Tijd tussen twee leveringen"], c: 0},
+    {q: "Wat is Omzetsnelheid?", a: ["Aantal keren dat de gemiddelde voorraad wordt verkocht", "Snelheid van de kassa", "Tijd die een klant in de winkel is"], c: 0},
+    {q: "Partieel roulerende inventarisatie is...", a: ["Gedurende het jaar steeds een ander deel tellen", "De hele winkel in één keer tellen", "Alleen de koeling tellen"], c: 0},
+    {q: "Pijplijnvoorraad is...", a: ["Bestelde maar nog niet geleverde voorraad", "Voorraad in de vrachtwagen", "Voorraad in het schap"], c: 0},
+    {q: "Seizoenvoorraad is...", a: ["Extra voorraad voor seizoenschommelingen", "Voorraad voor de vakantie", "Voorraad die bijna over datum is"], c: 0},
+    {q: "Wat is Servicegraad?", a: ["Mate waarin winkel erin slaagt het juiste artikel direct te bieden", "Vriendelijkheid van personeel", "Aantal geopende kassa's"], c: 0},
+    {q: "Steekproefsgewijze inventarisatie is...", a: ["Slechts een beperkt aantal artikelen tellen", "De hele voorraad tellen", "Alleen tellen bij diefstal"], c: 0},
+    {q: "Technische voorraad is...", a: ["De werkelijke voorraad in het magazijn/winkel", "De voorraad volgens de computer", "Defecte producten"], c: 0},
+    {q: "Veiligheidsvoorraad is...", a: ["Extra voorraad voor schommelingen in vraag of levertijd", "Voorraad achter slot en grendel", "Brandveilige opslag"], c: 0},
+    {q: "Afboeken betekent...", a: ["Producten uit de voorraadadministratie verwijderen", "Producten goedkoper maken", "Geld naar de bank brengen"], c: 0},
+    {q: "Wat is een Besteleenheid?", a: ["Vast aantal artikelen in de verpakking", "Hoe vaak je per week bestelt", "De minimale bestelwaarde"], c: 0},
+    {q: "Bestelfrequentie is...", a: ["Aantal keren dat een bedrijf per periode bestelt", "Hoeveelheid artikelen per bestelling", "De tijd van de levering"], c: 0},
+    {q: "Bestelgrootte is...", a: ["Aantal artikelen in één keer besteld", "De fysieke afmeting van de doos", "Het aantal colli"], c: 0},
+    {q: "Wat is een Bestelmethode?", a: ["Manier van bestellen (grootte/moment)", "Bestellen via telefoon", "De route van de vrachtwagen"], c: 0},
+    {q: "Bestelmoment is...", a: ["Moment waarop een bedrijf een bestelling plaatst", "Het tijdstip van de levering", "De dag van de factuur"], c: 0},
+    {q: "Bestelniveau is...", a: ["Voorraadhoogte waarbij je moet bestellen (niet onder minimum)", "De kwaliteit van de leverancier", "De maximale vulgraad"], c: 0},
+    {q: "Bestelpunt is...", a: ["Voorraadhoogte waarbij je een nieuwe bestelling MOET plaatsen", "De plek waar de vrachtwagen staat", "De knop in de handterminal"], c: 0},
+    {q: "Bijboeken is...", a: ["Ontvangen goederen in de administratie registreren", "Extra marge rekenen", "Producten duurder maken"], c: 0},
+    {q: "Wat is ERP?", a: ["Software voor efficiënte inzet van alle bedrijfsbronnen", "Een type handterminal", "Een methode voor voorraadcounting"], c: 0},
+    {q: "Inkopen is...", a: ["Opnemen van een nieuw artikel in het assortiment", "Vakkenvullen", "Betalen bij de kassa"], c: 0},
+    {q: "Levertijd is...", a: ["Tijd tussen bestellen en het moment van levering", "Hoe lang de chauffeur mag rijden", "De houdbaarheid"], c: 0},
+    {q: "Optimale bestelgrootte is...", a: ["Grootte waarbij de som van bestel- en voorraadkosten het laagst is", "Zoveel mogelijk bestellen voor korting", "Altijd één volle pallet"], c: 0},
+    {q: "Point of Sale (POS) is...", a: ["Afrekenpunt en directe omgeving", "Het magazijn", "De parkeerplaats"], c: 0},
+    {q: "Risicokosten zijn...", a: ["Kosten door verlies, bederf of diefstal", "De prijs van een verzekering", "Boetes van de Arbo"], c: 0},
+    {q: "Signaalvoorraad is...", a: ["Voorraad waarbij het bestelpunt is bereikt", "Voorraad met een alarmsticker", "Voorraad die bijna over datum is"], c: 0},
+    {q: "Voorraadbeheer is...", a: ["Op peil houden van voorraad (aantal en kwaliteit)", "Producten in de koeling zetten", "De administratie bij de kassa"], c: 0},
+    {q: "Voorraadkosten zijn...", a: ["Kosten voor het aanhouden van een voorraad", "De inkoopprijs", "De transportkosten"], c: 0},
+    {q: "Acquisitiefraude is...", a: ["Oplichting met contracten voor niet-bestaande diensten", "Diefstal uit de kassa", "Foutieve voorraadtelling"], c: 0},
+    {q: "Administratieve voorraad is...", a: ["Voorraad volgens de administratie/computer", "De voorraad in het archief", "De fysieke voorraad"], c: 0},
+    {q: "Bekende derving is...", a: ["Derving waarvan de oorzaak bekend is", "Derving van vaste klanten", "Derving door de politie gemeld"], c: 0},
+    {q: "Beveiligingsplan is...", a: ["Maatregelen om criminaliteit te beperken", "Het schema van de bewaker", "De handleiding van het alarm"], c: 0},
+    {q: "Criminele derving is...", a: ["Verlies door opzet (diefstal/vandalisme)", "Derving door een systeemfout", "Derving door bederf"], c: 0},
+    {q: "Wat is de Dervingsnorm?", a: ["Toegestane percentage derving t.o.v. de omzet", "De werkelijke derving", "De wet over winkeldiefstal"], c: 0},
+    {q: "Fraude is...", a: ["Opzettelijke onjuiste weergave van de werkelijkheid", "Een foutje bij de kassa", "Per ongeluk iets vergeten"], c: 0},
+    {q: "Achterdeurprocedure is...", a: ["Regels voor het ontvangen van vracht", "Hoe je de winkel verlaat", "Regels voor roken"], c: 0},
+    {q: "Service Sweethearting is...", a: ["Diefstal door personeel voor bekenden (niet aanslaan)", "Extra korting aan vaste klanten", "Vriendelijk zijn"], c: 0},
+    {q: "Visitatie is...", a: ["Onderzoeken van tassen en jassen", "Bezoek van de manager", "Schoonmaken van de winkel"], c: 0},
+    {q: "De Arbowet is...", a: ["Wet over veiligheid, gezondheid en welzijn", "Wet over het salaris", "Wet over vakantiedagen"], c: 0},
+    {q: "Arbobesluit is...", a: ["Concrete uitwerking van de Arbowet", "De beslissing van de arts", "Een boete"], c: 0},
+    {q: "Branddriehoek is...", a: ["Zuurstof, brandstof, hitte", "Rook, vlammen, as", "Water, CO2, schuim"], c: 0},
+    {q: "Calamiteit is...", a: ["Grote ramp of ongeluk", "Een klant die klaagt", "Fout in de levering"], c: 0},
+    {q: "Ergonomie is...", a: ["Aanpassen van werkomstandigheden aan de mens", "Snelheid van werken", "Kennis over geld"], c: 0},
+    {q: "HACCP is...", a: ["Systeem voor voedselveiligheid", "Veiligheidsplan voor brand", "Kassasysteem"], c: 0},
+    {q: "RI&E staat voor...", a: ["Risico-inventarisatie en -evaluatie", "Retail Inkoop en Export", "Regionale Inkoop-Eis"], c: 0},
+    {q: "Vitaliteit is...", a: ["Energie, kracht en wil om te groeien", "Gezond eten", "Snelheid van werken"], c: 0},
+    {q: "Welzijn is...", a: ["Toestand waarin je je goed voelt", "Het ontvangen van een uitkering", "Voldoende salaris"], c: 0},
+    {q: "Wat is een Collo?", a: ["Eenheid waarin goederen worden vervoerd", "Een type pallet", "Een administratieve melding"], c: 0},
+    {q: "Correctielijst is...", a: ["Lijst met afwijkingen aan geleverde goederen", "Lijst met taalfouten", "Een nieuwe prijslijst"], c: 0},
+    {q: "Distributiecentrum (DC) is...", a: ["Centraal magazijn dat winkels bevoorraadt", "De plek waar klanten pakketjes halen", "Het hoofdkantoor"], c: 0},
+    {q: "Emballage is...", a: ["Verpakkingsmateriaal met statiegeld", "Luxe inpakpapier", "Afvalverwerking"], c: 0},
+    {q: "Franco levering is...", a: ["Leverancier betaalt transportkosten", "Koper betaalt transportkosten", "Levering is gratis"], c: 0},
+    {q: "Geleidedocumenten zijn...", a: ["Documenten bij levering voor controle", "Handleiding van de truck", "De routekaart"], c: 0},
+    {q: "Integrale controle is...", a: ["De volledige levering controleren", "Alleen de koeling controleren", "Eén doos controleren"], c: 0},
+    {q: "Kwantitatieve controle is...", a: ["Controle op de aantallen", "Controle op de kwaliteit", "Controle op de prijs"], c: 0},
+    {q: "Logistiek is...", a: ["Begeleiden van de goederenstroom", "Het tellen van de kassa", "De personeelsplanning"], c: 0},
+    {q: "Reclameren is...", a: ["Navraag doen naar een order die niet klopt", "Reclame maken", "Klanten helpen"], c: 0},
+    {q: "FIFO-principe is...", a: ["First In, First Out", "Last In, First Out", "Fast In, Fast Out"], c: 0},
+    {q: "LIFO-principe is...", a: ["Last In, First Out", "First In, First Out", "Lage inkoop"], c: 0},
+    {q: "Reachtruck is...", a: ["Transportmiddel met uitschuifbare mast", "Een snelle vrachtwagen", "De handcomputer"], c: 0},
+    {q: "Vastelocatiesysteem betekent...", a: ["Goederen hebben een vaste opslaglocatie", "De winkel staat vast", "De prijs staat vast"], c: 0},
+    {q: "Vrijelocatiesysteem betekent...", a: ["Goederen op iedere beschikbare plek opslaan", "Gratis levering", "Zelf een plek kiezen in de winkel"], c: 0},
+    {q: "Vriescel temperatuur is...", a: ["-18°C of kouder", "0°C", "5°C"], c: 0},
+    {q: "Alfanumerieke code is...", a: ["Code met cijfers en letters", "Code met alleen cijfers", "Een streepjescode"], c: 0},
+    {q: "Barcode is...", a: ["Combinatie van verticale strepen", "Een geheime code", "De prijssticker"], c: 0},
+    {q: "Fastmovers zijn...", a: ["Artikelen met hoge omzetsnelheid", "Artikelen die snel bederven", "Snel rijdende trucks"], c: 0},
+    {q: "Slowmovers zijn...", a: ["Artikelen met lage omzetsnelheid", "Grote zware artikelen", "Leveringen die te laat zijn"], c: 0},
+    {q: "Oud-voor-nieuw regeling is...", a: ["Gratis inleveren oud apparaat bij koop nieuw", "Oude producten vooraan zetten", "Oude medewerkers trainen"], c: 0},
+    {q: "Vluchtweg is...", a: ["Route die je volgt bij een calamiteit", "De weg naar de kantine", "De uitgang voor klanten"], c: 0},
+    {q: "Veiligheidssignaal is...", a: ["Bord of sticker die waarschuwt", "Een alarmbel", "Een knipperlicht"], c: 0},
+    {q: "Ontruimingsplan is...", a: ["Plan voor wat te doen bij ontruiming", "Een verbouwingsplan", "Schoonmaakrooster"], c: 0},
+    {q: "PBM staat voor...", a: ["Persoonlijk beschermingsmiddel", "Personeels Beheer Methode", "Product Belasting Meter"], c: 0},
+    {q: "Afvalstroom is...", a: ["De weg die afval aflegt", "Een lekkende vuilniszak", "De kosten van afval"], c: 0},
+    {q: "Arbobeleid is...", a: ["Wat een werkgever doet voor goede werkomstandigheden", "De boetes van de Arbo", "Het rooster van de arts"], c: 0},
+    {q: "Bedrijfshulpverlener (BHV) is...", a: ["Werknemer die hulp verleent bij incidenten", "De manager van het filiaal", "De bewaker"], c: 0},
+    {q: "Onbekende derving is...", a: ["Derving waarvan de oorzaak niet te achterhalen is", "Diefstal door onbekenden", "Derving in het magazijn"], c: 0},
+    {q: "Preventie is...", a: ["Maatregelen om derving of ongevallen te voorkomen", "Het straffen van dieven", "Schoonmaken"], c: 0},
+    {q: "Psychosociale arbeidsbelasting (PSA) is...", a: ["Stress, agressie of werkdruk", "Zware dozen tillen", "Lange werktijden"], c: 0},
+    {q: "Retouren zijn...", a: ["Goederen die teruggaan naar de leverancier", "Nieuwe leveringen", "Klanten die terugkomen"], c: 0},
+    {q: "Sensitiviteit is...", a: ["Gevoeligheid voor signalen van onraad", "Snelheid van de handscanner", "Vriendelijkheid"], c: 0},
+    {q: "Sociale veiligheid is...", a: ["Bescherming tegen agressie en geweld", "De verzekering van het personeel", "Samen lunchen"], c: 0},
+    {q: "Winkelontzegging is...", a: ["Verbod om de winkel te betreden", "Een winkel die gesloten is", "Geen korting krijgen"], c: 0},
+    {q: "Voorraadwaardering is...", a: ["Bepalen van de waarde van de voorraad", "Tellen van de voorraad", "Producten mooi neerzetten"], c: 0},
+    {q: "Zichtderving is...", a: ["Bekende derving (breuk, bederf)", "Diefstal die je ziet gebeuren", "Onbekende derving"], c: 0}
+];
+
+let selected = [];
+let cur = 0;
+let score = 0;
+let errors = [];
+let choice = null;
+
+function start() {
+    selected = [...fullPool].sort(() => 0.5 - Math.random()).slice(0, 30);
+    cur = 0; score = 0; errors = [];
+    document.getElementById("quiz-area").style.display = "block";
+    document.getElementById("result-area").style.display = "none";
+    show();
+}
+
+function show() {
+    choice = null;
+    const q = selected[cur];
+    document.getElementById("counter").innerText = "Vraag " + (cur + 1) + "/30";
+    document.getElementById("q-text").innerText = q.q;
+    const optArea = document.getElementById("options-area");
+    optArea.innerHTML = "";
+    q.a.forEach((a, i) => {
+        const d = document.createElement("div");
+        d.className = "option";
+        d.innerText = a;
+        d.onclick = () => {
+            document.querySelectorAll(".option").forEach(e => e.className = "option");
+            d.className = "option selected";
+            choice = i;
+        };
+        optArea.appendChild(d);
+    });
+}
+
+function handleNext() {
+    if (choice === null) return alert("Selecteer een antwoord!");
+    if (choice === selected[cur].c) score++;
+    else errors.push({q: selected[cur].q, u: selected[cur].a[choice], c: selected[cur].a[selected[cur].c]});
+    
+    cur++;
+    if (cur < 30) show();
+    else end();
+}
+
+function end() {
+    document.getElementById("quiz-area").style.display = "none";
+    document.getElementById("result-area").style.display = "block";
+    document.getElementById("final-score").innerText = score + "/30";
+    const log = document.getElementById("error-log");
+    log.innerHTML = "";
+    errors.forEach(e => {
+        log.innerHTML += `<div class="error-card"><b>${e.q}</b><br><span style="color:red">Jouw antwoord: ${e.u}</span><br><span style="color:green">Juist: ${e.c}</span></div>`;
+    });
+}
+
+start();
+</script>
+</body>
+</html>
