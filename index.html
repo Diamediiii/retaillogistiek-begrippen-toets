@@ -141,9 +141,26 @@ let mistakes = [];
 let userChoice = null;
 
 function startQuiz() {
-    // Pak 30 random vragen uit de pool van 90+
-    selectedQuestions = [...fullPool].sort(() => 0.5 - Math.random()).slice(0, 30);
-    showQuestion();
+    try {
+        // Reset alle variabelen
+        currentIdx = 0;
+        score = 0;
+        mistakes = [];
+        
+        // Extra veilige manier van husselen
+        selectedQuestions = fullPool
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+            .slice(0, 30);
+
+        document.getElementById("quiz-area").style.display = "block";
+        document.getElementById("result-area").style.display = "none";
+        showQuestion();
+    } catch (e) {
+        console.error("Fout bij starten quiz:", e);
+        alert("Er ging iets mis. Druk op F5 om de pagina te verversen.");
+    }
 }
 
 function showQuestion() {
