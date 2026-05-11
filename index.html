@@ -14,10 +14,36 @@
         button:hover { background: #38a169; }
         #result-area { display: none; }
         .error-card { border-left: 5px solid #f56565; padding: 15px; margin: 15px 0; background: #fff5f5; border-radius: 5px; }
+        .header {
+        background-color: #004c97; /* Hoogvliet Blauw */
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 15px 15px 0 0;
+        margin: -30px -30px 20px -30px; /* Zorgt dat hij perfect aansluit op de randen */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+}
+
+    .header img {
+        max-height: 50px;
+        background: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 1.8em;
+    }
     </style>
 </head>
 <body>
 <div class="container">
+    <img src="https://www.hoogvliet.com/static/hoogvliet/images/logo.png" alt="Hoogvliet Logo">
+    <h1>Oefentoets Retaillogistiek</h1>
     <div id="quiz-area">
         <h3 id="counter">Vraag 1/30</h3>
         <p id="q-text" style="font-weight:bold; font-size:1.25em; min-height: 50px;"></p>
