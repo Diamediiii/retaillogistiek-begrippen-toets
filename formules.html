@@ -92,16 +92,25 @@ function generateQuestions() {
         const amt = Math.floor(Math.random() * 3) + 3;
         const start = Math.floor(Math.random() * (mnd.length - amt + 1));
         let lijst = [], som = 0, tekst = "";
+        
         for (let i = 0; i < amt; i++) {
             const w = Math.floor(Math.random() * 400) + 600;
             const nm = mnd[start + i];
             lijst.push(w);
+            // De 0,5 regel wordt hier stil toegepast
             som += (i === 0 || i === amt - 1) ? 0.5 * w : w;
             tekst += `${nm}: ${w}<br>`;
         }
+        
         const deler = amt - 1;
-        const ans = som / deler;
-        return { q: `<b>Bereken de Gemiddelde Voorraad (${amt} maanden):</b><br><i>(Gebruik factor 0,5 voor de eerste en laatste maand)</i><br><br>${tekst}`, c: ans, exp: `Uitleg: (0,5×${lijst[0]} + tussenliggende + 0,5×${lijst[lijst.length-1]}) / ${deler} = ${ans}` };
+        const res = som / deler;
+        const ans = Number.isInteger(res) ? res : res.toFixed(1);
+
+        return { 
+            q: `<b>Bereken de Gemiddelde Voorraad (${amt} maanden):</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>${tekst}`, 
+            c: ans, 
+            exp: `Uitleg: (0,5 × ${lijst[0]} + tussenliggende maanden + 0,5 × ${lijst[lijst.length-1]}) / ${deler} = ${ans}` 
+        };
     };
 
     let pool = [typeOS(), typeOS(), typeOD(), typeOD(), typeSG(), typeSG(), typeEV(), typeGV2(), typeGV3(), typeGV3()];
