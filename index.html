@@ -160,23 +160,35 @@ function start() {
 
 function show() {
     choice = null;
-    const q = selected[cur];
+    const qData = selected[cur];
+    
+    // Maak een kopie van de antwoorden met hun index
+    let options = qData.a.map((text, index) => ({ text, index }));
+    
+    // Hussel de antwoorden willekeurig
+    options.sort(() => 0.5 - Math.random());
+
     document.getElementById("counter").innerText = "Vraag " + (cur + 1) + "/30";
-    document.getElementById("q-text").innerText = q.q;
+    document.getElementById("q-text").innerText = qData.q;
+    
     const optArea = document.getElementById("options-area");
     optArea.innerHTML = "";
-    q.a.forEach((a, i) => {
+    
+    options.forEach((opt) => {
         const d = document.createElement("div");
         d.className = "option";
-        d.innerText = a;
+        d.innerText = opt.text;
         d.onclick = () => {
             document.querySelectorAll(".option").forEach(e => e.className = "option");
             d.className = "option selected";
-            choice = i;
+            // We slaan de oorspronkelijke index op om te checken of het antwoord goed is
+            choice = opt.index;
         };
         optArea.appendChild(d);
     });
 }
+
+    
 
 function handleNext() {
     if (choice === null) return alert("Selecteer een antwoord!");
