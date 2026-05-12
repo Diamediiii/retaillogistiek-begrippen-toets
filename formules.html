@@ -12,6 +12,7 @@
             --hoogvliet-green: #86bc25;
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
+            --error: #ef4444;
         }
 
         body { 
@@ -27,43 +28,53 @@
 
         .container { 
             width: 95%; 
-            max-width: 700px; 
+            max-width: 600px; 
             background: var(--card-bg); 
             border-radius: 20px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-            overflow: hidden; 
             border: 1px solid rgba(255,255,255,0.1); 
+            overflow: hidden;
         }
 
         .header { 
             background: linear-gradient(135deg, var(--hoogvliet-blue), #003366); 
-            padding: 30px; 
+            padding: 25px; 
             text-align: center; 
             border-bottom: 4px solid var(--hoogvliet-green); 
         }
 
-        .header h1 { margin: 0; font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; }
-
         .quiz-content { padding: 30px; }
 
-        #q-text { font-size: 1.2em; line-height: 1.5; margin-bottom: 25px; min-height: 80px; }
+        #q-text { font-size: 1.2em; line-height: 1.6; margin-bottom: 20px; }
 
-        .option { 
-            background: rgba(255,255,255,0.05); 
-            padding: 18px; 
-            margin: 12px 0; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            border: 2px solid transparent; 
+        .input-wrapper { margin: 20px 0; }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2em;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
         }
 
-        .option:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); }
+        input[type="text"]:focus { border-color: var(--hoogvliet-blue); background: rgba(255,255,255,0.1); }
 
-        .selected { 
-            background: var(--hoogvliet-blue) !important; 
-            border-color: var(--hoogvliet-green) !important; 
+        #feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+            line-height: 1.4;
         }
+
+        .feedback-correct { background: rgba(134, 188, 37, 0.2); border: 1px solid var(--hoogvliet-green); color: var(--hoogvliet-green); }
+        .feedback-wrong { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: #fca5a5; }
 
         button { 
             width: 100%; 
@@ -74,10 +85,11 @@
             border-radius: 12px; 
             font-weight: 800; 
             cursor: pointer; 
-            margin-top: 20px; 
-            font-size: 1em;
+            margin-top: 10px;
             text-transform: uppercase;
         }
+
+        #next-btn { background: var(--hoogvliet-blue); color: white; display: none; }
 
         #result-area { display: none; text-align: center; }
     </style>
@@ -90,14 +102,22 @@
         <div id="quiz-area">
             <span id="counter" style="color: var(--hoogvliet-green); font-weight: bold; display: block; margin-bottom: 10px;">VRAAG 1/10</span>
             <p id="q-text"></p>
-            <div id="options-area"></div>
-            <button id="next-btn" onclick="checkAnswer()">Controleer Antwoord</button>
+            
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="Typ je antwoord..." autocomplete="off">
+            </div>
+
+            <div id="feedback"></div>
+
+            <button id="check-btn" onclick="checkAnswer()">Controleer</button>
+            <button id="next-btn" onclick="nextQuestion()">Volgende Vraag</button>
         </div>
+
         <div id="result-area">
-            <h2 style="font-size: 2em;">Resultaat</h2>
+            <h2 style="font-size: 2em;">Toets voltooid!</h2>
             <div id="final-score" style="font-size: 2.5em; color: var(--hoogvliet-green); margin: 20px 0;"></div>
             <button onclick="location.reload()">Opnieuw Starten</button>
-            <button onclick="window.location.href='index.html'" style="background: #334155; color: white; margin-top: 10px;">Terug naar Menu</button>
+            <button onclick="window.location.href='index.html'" style="background: #334155; color: white; margin-top: 10px;">Menu</button>
         </div>
     </div>
 </div>
@@ -106,111 +126,97 @@
 let questions = [];
 let cur = 0;
 let score = 0;
-let selectedChoice = null;
 
 function generateQuestions() {
     const types = [
-        // Economische Voorraad
         () => {
             const tv = Math.floor(Math.random() * 500) + 200;
             const bo = Math.floor(Math.random() * 100) + 20;
             const vl = Math.floor(Math.random() * 50) + 10;
             const ans = tv + bo - vl;
             return {
-                q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte (nog te leveren) goederen: ${vl}`,
-                options: [ans, ans + 25, ans - 15],
+                q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: **${tv}**<br>Bestelde goederen: **${bo}**<br>Verkochte goederen: **${vl}**`,
                 c: ans,
-                exp: `Uitleg: TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = ${ans}`
+                exp: `**Uitleg:** TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = **${ans}**`
             };
         },
-        // Omzetsnelheid
         () => {
             const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
             const gv = (Math.floor(Math.random() * 5) + 2) * 100;
             const ans = (omzet / gv).toFixed(1);
             return {
-                q: `Bereken de **Omzetsnelheid**:<br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad (inkoopwaarde): €${gv}`,
-                options: [ans, (omzet/gv + 1.5).toFixed(1), (omzet/gv - 0.8).toFixed(1)],
+                q: `Bereken de **Omzetsnelheid** (1 decimaal):<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`,
                 c: ans,
-                exp: `Uitleg: Netto-omzet (€${omzet}) / Gemiddelde Voorraad (€${gv}) = ${ans}`
+                exp: `**Uitleg:** Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = **${ans}**`
             };
         },
-        // Omzetduur
         () => {
             const os = Math.floor(Math.random() * 6) + 4;
             const ans = Math.round(360 / os);
             return {
-                q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is ${os}.<br>(Gebruik 360 dagen per jaar)`,
-                options: [ans, Math.round(365/os), os * 30],
+                q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Gebruik 360 dagen)`,
                 c: ans,
-                exp: `Uitleg: 360 dagen / Omzetsnelheid (${os}) = ${ans} dagen`
+                exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen`
             };
         },
-        // Servicegraad
         () => {
             const leverbaar = Math.floor(Math.random() * 100) + 850;
             const totaal = 1000;
-            const ans = ((leverbaar / totaal) * 100).toFixed(1) + "%";
+            const ans = ((leverbaar / totaal) * 100).toFixed(1);
             return {
-                q: `Bereken de **Servicegraad**:<br><br>Aantal artikelen direct leverbaar: ${leverbaar}<br>Totaal aantal artikelen in assortiment: ${totaal}`,
-                options: [ans, "92.5%", "88.0%"],
+                q: `Bereken de **Servicegraad** in % (1 decimaal):<br><br>Direct leverbaar: **${leverbaar}**<br>Totaal assortiment: **${totaal}**`,
                 c: ans,
-                exp: `Uitleg: (Leverbaar: ${leverbaar} / Totaal: ${totaal}) x 100% = ${ans}`
+                exp: `**Uitleg:** (${leverbaar} / ${totaal}) x 100% = **${ans}%**`
             };
         }
     ];
 
     questions = [];
     for(let i=0; i<10; i++) {
-        const randomType = types[Math.floor(Math.random() * types.length)];
-        questions.push(randomType());
+        questions.push(types[Math.floor(Math.random() * types.length)]());
     }
 }
 
 function show() {
-    selectedChoice = null;
     const q = questions[cur];
     document.getElementById("counter").innerText = `VRAAG ${cur + 1}/10`;
     document.getElementById("q-text").innerHTML = q.q;
-    const area = document.getElementById("options-area");
-    area.innerHTML = "";
-    
-    // Antwoorden husselen
-    let shuffledOptions = [...q.options].sort(() => 0.5 - Math.random());
-
-    shuffledOptions.forEach(opt => {
-        const d = document.createElement("div");
-        d.className = "option";
-        d.innerText = opt;
-        d.onclick = () => {
-            document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
-            d.classList.add("selected");
-            selectedChoice = opt;
-        };
-        area.appendChild(d);
-    });
+    document.getElementById("user-input").value = "";
+    document.getElementById("user-input").disabled = false;
+    document.getElementById("feedback").style.display = "none";
+    document.getElementById("check-btn").style.display = "block";
+    document.getElementById("next-btn").style.display = "none";
+    document.getElementById("user-input").focus();
 }
 
 function checkAnswer() {
-    if (selectedChoice === null) {
-        alert("Kies eerst een antwoord!");
-        return;
-    }
-    
+    const inputField = document.getElementById("user-input");
+    const rawInput = inputField.value.replace(',', '.').replace('%', '').trim();
     const q = questions[cur];
-    if (selectedChoice == q.c) {
-        score++;
-        alert("Correct! Goed gedaan.");
-    } else {
-        alert("Helaas, dat is niet juist.\n\n" + q.exp);
-    }
+    const feedback = document.getElementById("feedback");
+    
+    if (rawInput === "") return;
 
-    cur++;
-    if (cur < 10) {
-        show();
+    inputField.disabled = true;
+    document.getElementById("check-btn").style.display = "none";
+    document.getElementById("next-btn").style.display = "block";
+    feedback.style.display = "block";
+
+    // Vergelijk getallen (float)
+    if (parseFloat(rawInput) == parseFloat(q.c)) {
+        score++;
+        feedback.className = "feedback-correct";
+        feedback.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
     } else {
-        end();
+        feedback.className = "feedback-wrong";
+        feedback.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>${q.c}</b>.<br>${q.exp}`;
     }
+}
+
+function nextQuestion() {
+    cur++;
+    if (cur < 10) show();
+    else end();
 }
 
 function end() {
@@ -219,9 +225,20 @@ function end() {
     document.getElementById("final-score").innerText = `${score} / 10`;
 }
 
-// Start de boel
+// Start
 generateQuestions();
 show();
+
+// Enter-knop ondersteuning
+document.getElementById("user-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        if (document.getElementById("check-btn").style.display !== "none") {
+            checkAnswer();
+        } else {
+            nextQuestion();
+        }
+    }
+});
 </script>
 </body>
 </html>
