@@ -152,51 +152,66 @@ let particles = [];
 let animationId;
 
 function generateQuestions() {
-    const types = [
-        () => {
-            const tv = Math.floor(Math.random() * 500) + 200;
-            const bo = Math.floor(Math.random() * 100) + 20;
-            const vl = Math.floor(Math.random() * 50) + 10;
-            const ans = tv + bo - vl;
-            return {
-                q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: **${tv}**<br>Bestelde goederen: **${bo}**<br>Verkochte goederen: **${vl}**`,
-                c: ans,
-                exp: `**Uitleg:** TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = **${ans}**`
-            };
-        },
-        () => {
-            const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
-            const gv = (Math.floor(Math.random() * 5) + 2) * 100;
-            // Rekent uit of er decimalen nodig zijn
-            const result = omzet / gv;
-            const ans = Number.isInteger(result) ? result : result.toFixed(1);
-            return {
-                q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`,
-                c: ans,
-                exp: `**Uitleg:** Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = **${ans}**`
-            };
-        },
-        () => {
-            const os = Math.floor(Math.random() * 6) + 4;
-            const ans = Math.round(360 / os);
-            return {
-                q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Gebruik 360 dagen)`,
-                c: ans,
-                exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen`
-            };
-        },
-        () => {
-            const leverbaar = Math.floor(Math.random() * 100) + 850;
-            const totaal = 1000;
-            const result = (leverbaar / totaal) * 100;
-            const ans = Number.isInteger(result) ? result : result.toFixed(1);
-            return {
-                q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${leverbaar}**<br>Totaal assortiment: **${totaal}**`,
-                c: ans,
-                exp: `**Uitleg:** (${leverbaar} / ${totaal}) x 100% = **${ans}%**`
-            };
-        }
+    // Definieer de 4 types functies
+    const typeEV = () => {
+        const tv = Math.floor(Math.random() * 500) + 200;
+        const bo = Math.floor(Math.random() * 100) + 20;
+        const vl = Math.floor(Math.random() * 50) + 10;
+        const ans = tv + bo - vl;
+        return {
+            q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: **${tv}**<br>Bestelde goederen: **${bo}**<br>Verkochte goederen: **${vl}**`,
+            c: ans,
+            exp: `**Uitleg:** TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = **${ans}**`
+        };
+    };
+
+    const typeOS = () => {
+        const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
+        const gv = (Math.floor(Math.random() * 5) + 2) * 100;
+        const result = omzet / gv;
+        const ans = Number.isInteger(result) ? result : result.toFixed(1);
+        return {
+            q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`,
+            c: ans,
+            exp: `**Uitleg:** Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = **${ans}**`
+        };
+    };
+
+    const typeOD = () => {
+        const os = Math.floor(Math.random() * 6) + 4;
+        const ans = Math.round(360 / os);
+        return {
+            q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Gebruik 360 dagen)`,
+            c: ans,
+            exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen`
+        };
+    };
+
+    const typeSG = () => {
+        const leverbaar = Math.floor(Math.random() * 100) + 850;
+        const totaal = 1000;
+        const result = (leverbaar / totaal) * 100;
+        const ans = Number.isInteger(result) ? result : result.toFixed(1);
+        return {
+            q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${leverbaar}**<br>Totaal assortiment: **${totaal}**`,
+            c: ans,
+            exp: `**Uitleg:** (${leverbaar} / ${totaal}) x 100% = **${ans}%**`
+        };
+    };
+
+    // Stel de 10 vragen samen:
+    // 2x Omzetsnelheid (max)
+    // De rest (8 vragen) verdelen we over de andere types
+    let pool = [
+        typeOS(), typeOS(),      // Maximaal 2x de makkelijke deling
+        typeEV(), typeEV(), typeEV(), // 3x Economische voorraad
+        typeOD(), typeOD(), typeOD(), // 3x Omzetduur
+        typeSG(), typeSG()            // 2x Servicegraad
     ];
+
+    // Hussel de lijst zodat de volgorde elke keer anders is
+    questions = pool.sort(() => 0.5 - Math.random());
+}
 
     questions = [];
     for(let i=0; i<10; i++) {
