@@ -63,6 +63,7 @@ let cur = 0;
 let score = 0;
 
 function generateQuestions() {
+    // 1. Economische Voorraad
     const typeEV = () => {
         const tv = Math.floor(Math.random() * 500) + 200;
         const bo = Math.floor(Math.random() * 100) + 20;
@@ -71,29 +72,58 @@ function generateQuestions() {
         return { q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: **${tv}**<br>Bestelde goederen: **${bo}**<br>Verkochte goederen: **${vl}**`, c: ans, exp: `**Uitleg:** TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = **${ans}**` };
     };
 
+    // 2. Omzetsnelheid (Max 2 per toets)
     const typeOS = () => {
         const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
         const gv = (Math.floor(Math.random() * 5) + 2) * 100;
         const res = omzet / gv;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`, c: ans, exp: `**Uitleg:** Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = **${ans}**` };
+        return { q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`, c: ans, exp: `**Uitleg:** Netto-omzet / Gem. Voorraad = **${ans}**` };
     };
 
+    // 3. Omzetduur (Max 2 per toets)
     const typeOD = () => {
-        const os = Math.floor(Math.random() * 6) + 4;
+        const os = (Math.random() * 4 + 4).toFixed(1);
         const ans = Math.round(360 / os);
-        return { q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Gebruik 360 dagen)`, c: ans, exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen` };
+        return { q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Reken met 360 dagen)`, c: ans, exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen` };
     };
 
+    // 4. Servicegraad (Nu met random assortiment)
     const typeSG = () => {
-        const lev = Math.floor(Math.random() * 100) + 850;
-        const tot = 1000;
-        const res = (lev / tot) * 100;
+        const totaal = Math.floor(Math.random() * 1100) + 400; // Tussen 400 en 1500
+        const lev = Math.floor(totaal * (Math.random() * 0.15 + 0.82)); // 82% tot 97% leverbaar
+        const res = (lev / totaal) * 100;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${lev}**<br>Totaal assortiment: **${tot}**`, c: ans, exp: `**Uitleg:** (${lev} / ${tot}) x 100% = **${ans}%**` };
+        return { q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${lev}**<br>Totaal assortiment: **${totaal}**`, c: ans, exp: `**Uitleg:** (${lev} / ${totaal}) x 100% = **${ans}%**` };
     };
 
-    let pool = [typeOS(), typeOS(), typeEV(), typeEV(), typeEV(), typeOD(), typeOD(), typeOD(), typeSG(), typeSG()];
+    // 5. Gemiddelde voorraad (2 meetpunten)
+    const typeGV2 = () => {
+        const begin = Math.floor(Math.random() * 1000) + 500;
+        const eind = Math.floor(Math.random() * 1000) + 500;
+        const ans = (begin + eind) / 2;
+        return { q: `Bereken de **Gemiddelde Voorraad** (2 meetpunten):<br><br>Beginvoorraad: **${begin}**<br>Eindvoorraad: **${eind}**`, c: ans, exp: `**Uitleg:** (Begin + Eind) / 2 = **${ans}**` };
+    };
+
+    // 6. Gemiddelde voorraad (3 meetpunten - de 'vage' formule)
+    const typeGV3 = () => {
+        const b = Math.floor(Math.random() * 400) + 600;
+        const m = Math.floor(Math.random() * 400) + 600;
+        const e = Math.floor(Math.random() * 400) + 600;
+        const ans = (0.5 * b + m + 0.5 * e) / 2;
+        return { q: `Bereken de **Gemiddelde Voorraad** (3 meetpunten/tussenvoorraad):<br>*(Reken met de factor 0,5 voor de eerste en laatste meting)*<br><br>Januari: **${b}**<br>Februari: **${m}**<br>Maart: **${e}**`, c: ans, exp: `**Uitleg:** (0,5 × ${b} + ${m} + 0,5 × ${e}) / (3 - 1) = **${ans}**` };
+    };
+
+    // Vaste verdeling voor de 10 vragen
+    let pool = [
+        typeOS(), typeOS(),      // Max 2x Omzetsnelheid
+        typeOD(), typeOD(),      // Max 2x Omzetduur
+        typeSG(), typeSG(),      // 2x Servicegraad
+        typeEV(),                // 1x Economische voorraad
+        typeGV2(),               // 1x Gem. voorraad (simpel)
+        typeGV3(), typeGV3()     // 2x Gem. voorraad (moeilijk)
+    ];
+
     questions = pool.sort(() => 0.5 - Math.random());
 }
 
