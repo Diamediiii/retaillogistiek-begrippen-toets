@@ -5,22 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekenen - Hoogvliet Academy</title>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --hoogvliet-blue: #004c97;
-            --hoogvliet-green: #86bc25;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --error: #ef4444;
-        }
-
+        :root { --bg-color: #0f172a; --card-bg: #1e293b; --hoogvliet-blue: #004c97; --hoogvliet-green: #86bc25; --text-main: #f8fafc; --text-dim: #94a3b8; --error: #ef4444; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
         .container { width: 95%; max-width: 600px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative; z-index: 10; }
         .header { background: linear-gradient(135deg, var(--hoogvliet-blue), #003366); padding: 25px; text-align: center; border-bottom: 4px solid var(--hoogvliet-green); }
         .quiz-content { padding: 30px; }
-        #q-text { font-size: 1.2em; line-height: 1.6; margin-bottom: 20px; min-height: 100px; }
-        input[type="text"] { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.2em; text-align: center; box-sizing: border-box; outline: none; margin: 20px 0; }
+        #q-text { font-size: 1.1em; line-height: 1.6; margin-bottom: 20px; min-height: 120px; }
+        input[type="text"] { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.2em; text-align: center; box-sizing: border-box; outline: none; margin: 10px 0; }
         input[type="text"]:focus { border-color: var(--hoogvliet-blue); }
         #feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; line-height: 1.4; }
         .feedback-correct { background: rgba(134, 188, 37, 0.2); border: 1px solid var(--hoogvliet-green); color: var(--hoogvliet-green); }
@@ -40,7 +31,7 @@
     <div class="quiz-content">
         <div id="quiz-area">
             <span id="counter" style="color: var(--hoogvliet-green); font-weight: bold; display: block; margin-bottom: 10px;">VRAAG 1/10</span>
-            <p id="q-text"></p>
+            <div id="q-text"></div>
             <input type="text" id="user-input" placeholder="Typ je antwoord..." autocomplete="off">
             <div id="feedback"></div>
             <button id="check-btn" onclick="checkAnswer()">Controleer</button>
@@ -48,8 +39,8 @@
         </div>
 
         <div id="result-area">
-            <h2 style="font-size: 2.5em; margin-bottom: 10px;">Toets voltooid! ✨</h2>
-            <div id="final-score" style="font-size: 3.5em; color: var(--hoogvliet-green); margin: 20px 0; font-weight: 800;"></div>
+            <h2 style="font-size: 2.2em; margin-bottom: 10px;">Toets voltooid! ✨</h2>
+            <div id="final-score" style="font-size: 3em; color: var(--hoogvliet-green); margin: 20px 0; font-weight: 800;"></div>
             <p id="congrats-text" style="color: var(--text-dim); margin-bottom: 30px;"></p>
             <button onclick="location.reload()">Opnieuw Starten</button>
             <button onclick="window.location.href='index.html'" style="background: #334155; color: white; margin-top: 10px;">Menu</button>
@@ -63,124 +54,57 @@ let cur = 0;
 let score = 0;
 
 function generateQuestions() {
-    // 1. Economische Voorraad
     const typeEV = () => {
-        const tv = Math.floor(Math.random() * 500) + 200;
-        const bo = Math.floor(Math.random() * 100) + 20;
-        const vl = Math.floor(Math.random() * 50) + 10;
+        const tv = Math.floor(Math.random() * 500) + 200, bo = Math.floor(Math.random() * 100) + 20, vl = Math.floor(Math.random() * 50) + 10;
         const ans = tv + bo - vl;
-        return { 
-            q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte goederen: ${vl}`, 
-            c: ans, 
-            exp: `Uitleg: TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = ${ans}` 
-        };
+        return { q: `<b>Bereken de Economische Voorraad:</b><br><br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte goederen: ${vl}`, c: ans, exp: `Uitleg: ${tv} + ${bo} - ${vl} = ${ans}` };
     };
 
-    // 2. Omzetsnelheid
     const typeOS = () => {
-        const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
-        const gv = (Math.floor(Math.random() * 5) + 2) * 100;
+        const omzet = (Math.floor(Math.random() * 50) + 10) * 100, gv = (Math.floor(Math.random() * 5) + 2) * 100;
         const res = omzet / gv;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { 
-            q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad: €${gv}`, 
-            c: ans, 
-            exp: `Uitleg: Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = ${ans}` 
-        };
+        return { q: `<b>Bereken de Omzetsnelheid:</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad: €${gv}`, c: ans, exp: `Uitleg: €${omzet} / €${gv} = ${ans}` };
     };
 
-    // 3. Omzetduur
     const typeOD = () => {
         const os = (Math.random() * 4 + 4).toFixed(1);
         const ans = Math.round(360 / os);
-        return { 
-            q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is ${os}.<br>(Reken met 360 dagen)`, 
-            c: ans, 
-            exp: `Uitleg: 360 / Omzetsnelheid (${os}) = ${ans} dagen` 
-        };
+        return { q: `<b>Bereken de Omzetduur in dagen:</b><br><br>De omzetsnelheid is ${os}.<br>(Gebruik 360 dagen)`, c: ans, exp: `Uitleg: 360 / ${os} = ${ans} dagen` };
     };
 
-    // 4. Servicegraad
     const typeSG = () => {
-        const totaal = Math.floor(Math.random() * 1100) + 400;
-        const lev = Math.floor(totaal * (Math.random() * 0.15 + 0.82));
-        const res = (lev / totaal) * 100;
+        const tot = Math.floor(Math.random() * 1100) + 400;
+        const lev = Math.floor(tot * (Math.random() * 0.15 + 0.82));
+        const res = (lev / tot) * 100;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { 
-            q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: ${lev}<br>Totaal assortiment: ${totaal}`, 
-            c: ans, 
-            exp: `Uitleg: (${lev} / ${totaal}) x 100% = ${ans}%` 
-        };
+        return { q: `<b>Bereken de Servicegraad in %:</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>Direct leverbaar: ${lev}<br>Totaal assortiment: ${tot}`, c: ans, exp: `Uitleg: (${lev} / ${tot}) x 100% = ${ans}%` };
     };
 
-    // 5. Gemiddelde voorraad (2 punten)
     const typeGV2 = () => {
-        const begin = Math.floor(Math.random() * 1000) + 500;
-        const eind = Math.floor(Math.random() * 1000) + 500;
-        const ans = (begin + eind) / 2;
-        return { 
-            q: `Bereken de **Gemiddelde Voorraad** (2 meetpunten):<br><br>Beginvoorraad: ${begin}<br>Eindvoorraad: ${eind}`, 
-            c: ans, 
-            exp: `Uitleg: (${begin} + ${eind}) / 2 = ${ans}` 
-        };
+        const b = Math.floor(Math.random() * 1000) + 500, e = Math.floor(Math.random() * 1000) + 500;
+        const ans = (b + e) / 2;
+        return { q: `<b>Bereken de Gemiddelde Voorraad (2 punten):</b><br><br>Beginvoorraad: ${b}<br>Eindvoorraad: ${e}`, c: ans, exp: `Uitleg: (${b} + ${e}) / 2 = ${ans}` };
     };
 
-    // 6. Dynamische Gemiddelde voorraad (3, 4 of 5 punten)
     const typeGV3 = () => {
-        const maandenLijst = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-        const aantalMetingen = Math.floor(Math.random() * 3) + 3;
-        const maxStart = maandenLijst.length - aantalMetingen;
-        const startMaandIndex = Math.floor(Math.random() * (maxStart + 1));
-        
-        let metingen = [];
-        let som = 0;
-        let vraagTekst = "";
-
-        for (let i = 0; i < aantalMetingen; i++) {
-            const waarde = Math.floor(Math.random() * 400) + 600;
-            const maandNaam = maandenLijst[startMaandIndex + i];
-            metingen.push({ naam: maandNaam, waarde: waarde });
-            
-            if (i === 0 || i === aantalMetingen - 1) {
-                som += 0.5 * waarde;
-            } else {
-                som += waarde;
-            }
-            vraagTekst += `${maandNaam}: ${waarde}<br>`;
+        const mnd = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+        const amt = Math.floor(Math.random() * 3) + 3;
+        const start = Math.floor(Math.random() * (mnd.length - amt + 1));
+        let lijst = [], som = 0, tekst = "";
+        for (let i = 0; i < amt; i++) {
+            const w = Math.floor(Math.random() * 400) + 600;
+            const nm = mnd[start + i];
+            lijst.push(w);
+            som += (i === 0 || i === amt - 1) ? 0.5 * w : w;
+            tekst += `${nm}: ${w}<br>`;
         }
-
-        const deler = aantalMetingen - 1;
+        const deler = amt - 1;
         const ans = som / deler;
-
-        return { 
-            q: `Bereken de **Gemiddelde Voorraad** over deze ${aantalMetingen} maanden:<br>*(Gebruik de factor 0,5 voor de eerste en laatste meting)*<br><br>${vraagTekst}`, 
-            c: ans, 
-            exp: `Uitleg: (0,5 × ${metingen[0].waarde} + tussenliggende + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = ${ans}` 
-        };
+        return { q: `<b>Bereken de Gemiddelde Voorraad (${amt} maanden):</b><br><i>(Gebruik factor 0,5 voor de eerste en laatste maand)</i><br><br>${tekst}`, c: ans, exp: `Uitleg: (0,5×${lijst[0]} + tussenliggende + 0,5×${lijst[lijst.length-1]}) / ${deler} = ${ans}` };
     };
 
-    // Vaste verdeling
-    let pool = [
-        typeOS(), typeOS(),
-        typeOD(), typeOD(),
-        typeSG(), typeSG(),
-        typeEV(),
-        typeGV2(),
-        typeGV3(), typeGV3()
-    ];
-
-    questions = pool.sort(() => 0.5 - Math.random());
-}
-    // Vaste verdeling voor de 10 vragen
-    let pool = [
-        typeOS(), typeOS(),      // Max 2x Omzetsnelheid
-        typeOD(), typeOD(),      // Max 2x Omzetduur
-        typeSG(), typeSG(),      // 2x Servicegraad
-        typeEV(),                // 1x Economische voorraad
-        typeGV2(),               // 1x Gem. voorraad (simpel)
-        typeGV3(), typeGV3()     // 2x Gem. voorraad (moeilijk)
-    ];
-
+    let pool = [typeOS(), typeOS(), typeOD(), typeOD(), typeSG(), typeSG(), typeEV(), typeGV2(), typeGV3(), typeGV3()];
     questions = pool.sort(() => 0.5 - Math.random());
 }
 
@@ -197,8 +121,8 @@ function show() {
 }
 
 function checkAnswer() {
-    const input = document.getElementById("user-input").value.replace(',', '.').replace('%', '').trim();
-    if (input === "") return;
+    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').trim();
+    if (val === "") return;
     const q = questions[cur];
     document.getElementById("user-input").disabled = true;
     document.getElementById("check-btn").style.display = "none";
@@ -206,7 +130,7 @@ function checkAnswer() {
     const fb = document.getElementById("feedback");
     fb.style.display = "block";
 
-    if (parseFloat(input) == parseFloat(q.c)) {
+    if (parseFloat(val) == parseFloat(q.c)) {
         score++;
         fb.className = "feedback-correct";
         fb.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
@@ -226,18 +150,15 @@ function end() {
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
     document.getElementById("final-score").innerText = `${score} / 10`;
-    document.getElementById("congrats-text").innerText = score > 5 ? "Gefeliciteerd! Je bent goed op weg." : "Nog even oefenen voor het examen!";
+    document.getElementById("congrats-text").innerText = score > 5 ? "Gefeliciteerd! Je bent klaar voor het examen." : "Nog even oefenen, je komt er wel!";
     if(score > 5) startFireworks();
 }
 
-// Vuurwerk (Simpel)
+// Vuurwerk effect
 const canvas = document.getElementById('fireworks-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
-function startFireworks() {
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    loop();
-}
+function startFireworks() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; loop(); }
 function loop() {
     requestAnimationFrame(loop);
     ctx.clearRect(0,0,canvas.width,canvas.height);
