@@ -167,9 +167,11 @@ function generateQuestions() {
         () => {
             const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
             const gv = (Math.floor(Math.random() * 5) + 2) * 100;
-            const ans = (omzet / gv).toFixed(1);
+            // Rekent uit of er decimalen nodig zijn
+            const result = omzet / gv;
+            const ans = Number.isInteger(result) ? result : result.toFixed(1);
             return {
-                q: `Bereken de **Omzetsnelheid** (1 decimaal):<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`,
+                q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`,
                 c: ans,
                 exp: `**Uitleg:** Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = **${ans}**`
             };
@@ -186,14 +188,21 @@ function generateQuestions() {
         () => {
             const leverbaar = Math.floor(Math.random() * 100) + 850;
             const totaal = 1000;
-            const ans = ((leverbaar / totaal) * 100).toFixed(1);
+            const result = (leverbaar / totaal) * 100;
+            const ans = Number.isInteger(result) ? result : result.toFixed(1);
             return {
-                q: `Bereken de **Servicegraad** in % (1 decimaal):<br><br>Direct leverbaar: **${leverbaar}**<br>Totaal assortiment: **${totaal}**`,
+                q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${leverbaar}**<br>Totaal assortiment: **${totaal}**`,
                 c: ans,
                 exp: `**Uitleg:** (${leverbaar} / ${totaal}) x 100% = **${ans}%**`
             };
         }
     ];
+
+    questions = [];
+    for(let i=0; i<10; i++) {
+        questions.push(types[Math.floor(Math.random() * types.length)]());
+    }
+}
 
     questions = [];
     for(let i=0; i<10; i++) {
