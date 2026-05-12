@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekenen - Hoogvliet Academy</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --hoogvliet-blue: #004c97;
+            --hoogvliet-green: #86bc25;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
 
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { width: 95%; max-width: 700px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .header { background: linear-gradient(135deg, var(--hoogvliet-blue), #003366); padding: 30px; text-align: center; border-bottom: 4px solid var(--hoogvliet-green); }
+        .quiz-content { padding: 30px; }
+        #q-text { font-size: 1.2em; line-height: 1.5; margin-bottom: 20px; }
+        .option { background: rgba(255,255,255,0.05); padding: 15px; margin: 10px 0; border-radius: 12px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+        .option:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); }
+        .selected { background: var(--hoogvliet-blue) !important; border-color: var(--hoogvliet-green) !important; }
+        button { width: 100%; padding: 18px; background: var(--hoogvliet-green); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; }
+        .explanation { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 15px; margin-top: 15px; font-size: 0.9em; }
+        #result-area { display: none; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header"><h1>Rekenen & Kengetallen</h1></div>
+    <div class="quiz-content">
+        <div id="quiz-area">
+            <span id="counter" style="color: var(--hoogvliet-green); font-weight: bold;">Vraag 1/10</span>
+            <p id="q-text"></p>
+            <div id="options-area"></div>
+            <button onclick="checkAnswer()">Controleer Antwoord</button>
+        </div>
+        <div id="result-area">
+            <h2>Resultaat</h2>
+            <div id="final-score" style="font-size: 2em; color: var(--hoogvliet-green); margin: 20px 0;"></div>
+            <button onclick="location.reload()">Opnieuw Starten</button>
+            <button onclick="window.location.href='index.html'" style="background: #334155; color: white; margin-top: 10px;">Terug naar Menu</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let questions = [];
+let cur = 0;
+let score = 0;
+let selectedChoice = null;
+
+function generateQuestions() {
+    const types = [
+        () => {
+            const tv = Math.floor(Math.random() * 500) + 200;
+            const bo = Math.floor(Math.random() * 100) + 20;
+            const vl = Math.floor(Math.random() * 50) + 10;
+            const ans = tv + bo - vl;
+            return {
+                q: `Bereken de **Economische Voorraad**:<br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte (nog te leveren) goederen: ${vl}`,
+                options: [ans, ans + 30, ans - 20],
+                c: ans,
+                exp: `Formule: TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = ${ans}`
+            };
+        },
+        () => {
+            const omzet = Math.floor(Math.random() * 8000) + 2000;
+            const gv = Math.floor(Math.random() * 500) + 500;
+            const ans = (omzet / gv).toFixed(2);
+            return {
+                q: `Bereken de **Omzetsnelheid**:<br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad (inkoopwaarde): €${gv}`,
+                options: [ans, (omzet/400).toFixed(2), (omzet/1000).toFixed(2)],
+                c: ans,
+                exp: `Formule: Omzet (€${omzet}) / Gem. Voorraad (€${gv}) = ${ans}`
+            };
+        },
+        () => {
+            const os = Math.floor(Math.random() * 8) + 4;
+            const ans = (360 / os).toFixed(0);
+            return {
+                q: `Bereken de **Omzetduur in dagen**:<br>De omzetsnelheid is ${os}. (Reken met 360 dagen)`,
+                options: [ans, (365/os).toFixed(0), (os*12).toFixed(0)],
+                c: ans,
+                exp: `Formule: 360 / Omzetsnelheid (${os}) = ${ans} dagen`
+            };
+        },
+        () => {
+            const leverbaar = Math.floor(Math.random() * 150) + 800;
+            const totaal = 1000;
+            const ans = ((leverbaar / totaal) * 100).toFixed(1);
+            return {
+                q: `Bereken de **Servicegraad**:<br>Aantal artikelen direct leverbaar: ${leverbaar}<br>Totaal aantal artikelen in assortiment: ${totaal}`,
+                options: [ans + "%", (ans-5) + "%", "95.0%"],
+                c: ans + "%",
+                exp: `Formule: (Leverbaar / Totaal) x 100% = ${ans}%`
+            };
+        }
+    ];
+
+    for(let i=0; i<10; i++) {
+        questions.push(types[Math.floor(Math.random() * types.length)]());
+    }
+}
+
+function show() {
+    selectedChoice = null;
+    const q = questions[cur];
+    document.getElementById("counter").innerText = `Vraag ${cur + 1}/10`;
+    document.getElementById("q-text").innerHTML = q.q;
+    const area = document.getElementById("options-area");
+    area.innerHTML = "";
+    
+    q.options.sort(() => 0.5 - Math.random()).forEach(opt => {
+        const d = document.createElement("div");
+        d.className = "option";
+        d.innerText = opt;
+        d.onclick = () => {
+            document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
+            d.classList.add("selected");
+            selectedChoice = opt;
+        };
+        area.appendChild(d);
+    });
+}
+
+function checkAnswer() {
+    if (selectedChoice === null) return;
+    const q = questions[cur];
+    const isCorrect = selectedChoice == q.c;
+    
+    if (isCorrect) {
+        score++;
+        alert("Lekker gewerkt! Helemaal juist.");
+    } else {
+        alert("Helaas! \n\n" + q.exp);
+    }
+
+    cur++;
+    if (cur < 10) show();
+    else end();
+}
+
+function end() {
+    document.getElementById("quiz-area").style.display = "none";
+    document.getElementById("result-area").style.display = "block";
+    document.getElementById("final-score").innerText = `${score} / 10`;
+}
+
+generateQuestions();
+show();
+</script>
+</body>
+</html>
