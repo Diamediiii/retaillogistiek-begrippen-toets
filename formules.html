@@ -109,7 +109,10 @@ function generateQuestions() {
     const typeGV3 = () => {
         const maandenLijst = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
         const aantalMetingen = Math.floor(Math.random() * 3) + 3; // Kiest 3, 4 of 5
-        const startMaandIndex = Math.floor(Math.random() * (maandenLijst.length - aantalMetingen));
+        
+        // Zorg dat we niet voorbij December schieten
+        const maxStart = maandenLijst.length - aantalMetingen;
+        const startMaandIndex = Math.floor(Math.random() * (maxStart + 1));
         
         let metingen = [];
         let som = 0;
@@ -120,15 +123,24 @@ function generateQuestions() {
             const maandNaam = maandenLijst[startMaandIndex + i];
             metingen.push({ naam: maandNaam, waarde: waarde });
             
-            // Berekening voor de uitleg en het antwoord
+            // Berekening: eerste en laatste tellen voor de helft
             if (i === 0 || i === aantalMetingen - 1) {
                 som += 0.5 * waarde;
-                vraagTekst += `${maandNaam}: **${waarde}**<br>`;
             } else {
                 som += waarde;
-                vraagTekst += `${maandNaam}: **${waarde}**<br>`;
             }
+            vraagTekst += `${maandNaam}: **${waarde}**<br>`;
         }
+
+        const deler = aantalMetingen - 1;
+        const ans = som / deler;
+
+        return { 
+            q: `Bereken de **Gemiddelde Voorraad** over deze ${aantalMetingen} maanden:<br>*(Gebruik de factor 0,5 voor de eerste en laatste meting)*<br><br>${vraagTekst}`, 
+            c: ans, 
+            exp: `**Uitleg:** (0,5 × ${metingen[0].waarde} + tussenliggende maanden + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = **${ans}**` 
+        };
+    };
 
         const deler = aantalMetingen - 1;
         const ans = som / deler;
