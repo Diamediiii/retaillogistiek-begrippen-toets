@@ -69,48 +69,66 @@ function generateQuestions() {
         const bo = Math.floor(Math.random() * 100) + 20;
         const vl = Math.floor(Math.random() * 50) + 10;
         const ans = tv + bo - vl;
-        return { q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: **${tv}**<br>Bestelde goederen: **${bo}**<br>Verkochte goederen: **${vl}**`, c: ans, exp: `**Uitleg:** TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = **${ans}**` };
+        return { 
+            q: `Bereken de **Economische Voorraad**:<br><br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte goederen: ${vl}`, 
+            c: ans, 
+            exp: `Uitleg: TV (${tv}) + Besteld (${bo}) - Verkocht (${vl}) = ${ans}` 
+        };
     };
 
-    // 2. Omzetsnelheid (Max 2 per toets)
+    // 2. Omzetsnelheid
     const typeOS = () => {
         const omzet = (Math.floor(Math.random() * 50) + 10) * 100;
         const gv = (Math.floor(Math.random() * 5) + 2) * 100;
         const res = omzet / gv;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: **€${omzet}**<br>Gemiddelde voorraad: **€${gv}**`, c: ans, exp: `**Uitleg:** Netto-omzet / Gem. Voorraad = **${ans}**` };
+        return { 
+            q: `Bereken de **Omzetsnelheid**:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad: €${gv}`, 
+            c: ans, 
+            exp: `Uitleg: Netto-omzet (€${omzet}) / Gem. Voorraad (€${gv}) = ${ans}` 
+        };
     };
 
-    // 3. Omzetduur (Max 2 per toets)
+    // 3. Omzetduur
     const typeOD = () => {
         const os = (Math.random() * 4 + 4).toFixed(1);
         const ans = Math.round(360 / os);
-        return { q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is **${os}**.<br>(Reken met 360 dagen)`, c: ans, exp: `**Uitleg:** 360 / Omzetsnelheid (${os}) = **${ans}** dagen` };
+        return { 
+            q: `Bereken de **Omzetduur in dagen**:<br><br>De omzetsnelheid is ${os}.<br>(Reken met 360 dagen)`, 
+            c: ans, 
+            exp: `Uitleg: 360 / Omzetsnelheid (${os}) = ${ans} dagen` 
+        };
     };
 
-    // 4. Servicegraad (Nu met random assortiment)
+    // 4. Servicegraad
     const typeSG = () => {
-        const totaal = Math.floor(Math.random() * 1100) + 400; // Tussen 400 en 1500
-        const lev = Math.floor(totaal * (Math.random() * 0.15 + 0.82)); // 82% tot 97% leverbaar
+        const totaal = Math.floor(Math.random() * 1100) + 400;
+        const lev = Math.floor(totaal * (Math.random() * 0.15 + 0.82));
         const res = (lev / totaal) * 100;
         const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: **${lev}**<br>Totaal assortiment: **${totaal}**`, c: ans, exp: `**Uitleg:** (${lev} / ${totaal}) x 100% = **${ans}%**` };
+        return { 
+            q: `Bereken de **Servicegraad** in %:<br>*(Indien nodig afronden op 1 decimaal)*<br><br>Direct leverbaar: ${lev}<br>Totaal assortiment: ${totaal}`, 
+            c: ans, 
+            exp: `Uitleg: (${lev} / ${totaal}) x 100% = ${ans}%` 
+        };
     };
 
-    // 5. Gemiddelde voorraad (2 meetpunten)
+    // 5. Gemiddelde voorraad (2 punten)
     const typeGV2 = () => {
         const begin = Math.floor(Math.random() * 1000) + 500;
         const eind = Math.floor(Math.random() * 1000) + 500;
         const ans = (begin + eind) / 2;
-        return { q: `Bereken de **Gemiddelde Voorraad** (2 meetpunten):<br><br>Beginvoorraad: **${begin}**<br>Eindvoorraad: **${eind}**`, c: ans, exp: `**Uitleg:** (Begin + Eind) / 2 = **${ans}**` };
+        return { 
+            q: `Bereken de **Gemiddelde Voorraad** (2 meetpunten):<br><br>Beginvoorraad: ${begin}<br>Eindvoorraad: ${eind}`, 
+            c: ans, 
+            exp: `Uitleg: (${begin} + ${eind}) / 2 = ${ans}` 
+        };
     };
 
-    // 6. Dynamische Gemiddelde voorraad (3, 4 of 5 meetpunten)
+    // 6. Dynamische Gemiddelde voorraad (3, 4 of 5 punten)
     const typeGV3 = () => {
         const maandenLijst = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-        const aantalMetingen = Math.floor(Math.random() * 3) + 3; // Kiest 3, 4 of 5
-        
-        // Zorg dat we niet voorbij December schieten
+        const aantalMetingen = Math.floor(Math.random() * 3) + 3;
         const maxStart = maandenLijst.length - aantalMetingen;
         const startMaandIndex = Math.floor(Math.random() * (maxStart + 1));
         
@@ -123,13 +141,12 @@ function generateQuestions() {
             const maandNaam = maandenLijst[startMaandIndex + i];
             metingen.push({ naam: maandNaam, waarde: waarde });
             
-            // Berekening: eerste en laatste tellen voor de helft
             if (i === 0 || i === aantalMetingen - 1) {
                 som += 0.5 * waarde;
             } else {
                 som += waarde;
             }
-            vraagTekst += `${maandNaam}: **${waarde}**<br>`;
+            vraagTekst += `${maandNaam}: ${waarde}<br>`;
         }
 
         const deler = aantalMetingen - 1;
@@ -138,20 +155,22 @@ function generateQuestions() {
         return { 
             q: `Bereken de **Gemiddelde Voorraad** over deze ${aantalMetingen} maanden:<br>*(Gebruik de factor 0,5 voor de eerste en laatste meting)*<br><br>${vraagTekst}`, 
             c: ans, 
-            exp: `**Uitleg:** (0,5 × ${metingen[0].waarde} + tussenliggende maanden + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = **${ans}**` 
+            exp: `Uitleg: (0,5 × ${metingen[0].waarde} + tussenliggende + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = ${ans}` 
         };
     };
 
-        const deler = aantalMetingen - 1;
-        const ans = som / deler;
+    // Vaste verdeling
+    let pool = [
+        typeOS(), typeOS(),
+        typeOD(), typeOD(),
+        typeSG(), typeSG(),
+        typeEV(),
+        typeGV2(),
+        typeGV3(), typeGV3()
+    ];
 
-        return { 
-            q: `Bereken de **Gemiddelde Voorraad** (${aantalMetingen} meetpunten):<br>*(Reken met de factor 0,5 voor de eerste en laatste meting)*<br><br>${vraagTekst}`, 
-            c: ans, 
-            exp: `**Uitleg:** (0,5 × ${metingen[0].waarde} + tussenliggende maanden + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = **${ans}**` 
-        };
-    };
-
+    questions = pool.sort(() => 0.5 - Math.random());
+}
     // Vaste verdeling voor de 10 vragen
     let pool = [
         typeOS(), typeOS(),      // Max 2x Omzetsnelheid
