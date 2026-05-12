@@ -105,13 +105,39 @@ function generateQuestions() {
         return { q: `Bereken de **Gemiddelde Voorraad** (2 meetpunten):<br><br>Beginvoorraad: **${begin}**<br>Eindvoorraad: **${eind}**`, c: ans, exp: `**Uitleg:** (Begin + Eind) / 2 = **${ans}**` };
     };
 
-    // 6. Gemiddelde voorraad (3 meetpunten - de 'vage' formule)
+    // 6. Dynamische Gemiddelde voorraad (3, 4 of 5 meetpunten)
     const typeGV3 = () => {
-        const b = Math.floor(Math.random() * 400) + 600;
-        const m = Math.floor(Math.random() * 400) + 600;
-        const e = Math.floor(Math.random() * 400) + 600;
-        const ans = (0.5 * b + m + 0.5 * e) / 2;
-        return { q: `Bereken de **Gemiddelde Voorraad** (3 meetpunten/tussenvoorraad):<br>*(Reken met de factor 0,5 voor de eerste en laatste meting)*<br><br>Januari: **${b}**<br>Februari: **${m}**<br>Maart: **${e}**`, c: ans, exp: `**Uitleg:** (0,5 × ${b} + ${m} + 0,5 × ${e}) / (3 - 1) = **${ans}**` };
+        const maandenLijst = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+        const aantalMetingen = Math.floor(Math.random() * 3) + 3; // Kiest 3, 4 of 5
+        const startMaandIndex = Math.floor(Math.random() * (maandenLijst.length - aantalMetingen));
+        
+        let metingen = [];
+        let som = 0;
+        let vraagTekst = "";
+
+        for (let i = 0; i < aantalMetingen; i++) {
+            const waarde = Math.floor(Math.random() * 400) + 600;
+            const maandNaam = maandenLijst[startMaandIndex + i];
+            metingen.push({ naam: maandNaam, waarde: waarde });
+            
+            // Berekening voor de uitleg en het antwoord
+            if (i === 0 || i === aantalMetingen - 1) {
+                som += 0.5 * waarde;
+                vraagTekst += `${maandNaam}: **${waarde}**<br>`;
+            } else {
+                som += waarde;
+                vraagTekst += `${maandNaam}: **${waarde}**<br>`;
+            }
+        }
+
+        const deler = aantalMetingen - 1;
+        const ans = som / deler;
+
+        return { 
+            q: `Bereken de **Gemiddelde Voorraad** (${aantalMetingen} meetpunten):<br>*(Reken met de factor 0,5 voor de eerste en laatste meting)*<br><br>${vraagTekst}`, 
+            c: ans, 
+            exp: `**Uitleg:** (0,5 × ${metingen[0].waarde} + tussenliggende maanden + 0,5 × ${metingen[metingen.length-1].waarde}) / ${deler} = **${ans}**` 
+        };
     };
 
     // Vaste verdeling voor de 10 vragen
