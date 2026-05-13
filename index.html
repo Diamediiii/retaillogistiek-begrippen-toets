@@ -46,16 +46,16 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            width: 90%;
-            max-width: 800px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 95%;
+            max-width: 1000px; /* Iets breder gemaakt voor 3 kaarten */
         }
 
         .card {
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
             text-decoration: none;
             color: var(--text-main);
@@ -74,14 +74,14 @@
         }
 
         .icon-circle {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background: rgba(255,255,255,0.05);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
+            font-size: 2.2em;
             margin-bottom: 20px;
             transition: 0.3s;
         }
@@ -93,13 +93,14 @@
 
         .card h2 {
             margin: 0 0 10px 0;
-            font-size: 1.5em;
+            font-size: 1.4em;
         }
 
         .card p {
             color: var(--text-dim);
             margin: 0;
             line-height: 1.5;
+            font-size: 0.95em;
         }
 
         .badge {
@@ -107,64 +108,20 @@
             color: #000;
             padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.8em;
+            font-size: 0.75em;
             font-weight: bold;
             margin-bottom: 15px;
             text-transform: uppercase;
         }
 
         .badge.new {
-            background: #ffeb3b; /* Een opvallende gele kleur voor de 'New' status */
+            background: #ffeb3b;
             box-shadow: 0 0 10px rgba(255, 235, 59, 0.4);
         }
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--hoogvliet-green);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        }
-        
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        
-        .card h2 {
-            color: var(--hoogvliet-green);
-            margin: 10px 0;
-            font-size: 1.5rem;
-        }
-        
-        .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .card-tag {
-            margin-top: 15px;
+        .badge.custom {
             background: var(--hoogvliet-blue);
             color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-transform: uppercase;
         }
 
         footer {
@@ -187,25 +144,23 @@
             <div class="badge">UPDATED!!</div>
             <div class="icon-circle">📖</div>
             <h2>Retaillogistiek</h2>
-            <p>Oefen alle 90+ begrippen uit het boek. Focus op derving, voorraad en logistieke ketens. Nu ook met Casus vragen!</p>
+            <p>Oefen alle 90+ begrippen uit het boek. Focus op derving, voorraad en logistieke ketens.</p>
         </a>
 
+         <a href="keuze_toets.html" class="card">
+            <div class="badge custom">CUSTOM!!</div>
+            <div class="icon-circle">⚙️</div>
+            <h2>Retaillogistiek Custom</h2>
+            <p>Bepaal zelf hoeveel vragen je wilt oefenen. Ideaal voor een snelle check of een marathon-sessie.</p>
+        </a>
+        
         <a href="formules.html" class="card">
             <div class="badge new">NEW: OEFEN NU!</div>
             <div class="icon-circle">🧮</div>
             <h2>Kengetallen</h2>
             <p>Oefen met rekenformules voor omzetsnelheid, voorraadwaardering en dervingspercentages.</p>
-        </a>
+        </a>   
     </div>
-
-    <div class="card" onclick="location.href='keuze_toets.html'">
-    <div class="card-icon">⚙️</div>
-    <div class="card-content">
-        <h2>Keuze Toets</h2>
-        <p>Bepaal zelf hoeveel vragen je wilt oefenen en test je kennis op maat.</p>
-        <span class="card-tag">Custom Lengte</span>
-    </div>
-</div>
 
     <footer>&copy; 2026 Hoogvliet Oefentraining - Retaillogistiek MBO 4</footer>
 
