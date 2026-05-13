@@ -301,8 +301,10 @@ let totalQuestions = 10;
 function preStart() {
     const input = document.getElementById('question-count');
     let val = parseInt(input.value);
+    
+    // Zorg dat dit op 125 staat als dat je totale aantal vragen is
     if (isNaN(val) || val < 1) val = 1;
-    if (val > fullPool.length) val = fullPool.length;
+    if (val > 125) val = 125; 
     
     totalQuestions = val;
     start();
@@ -322,7 +324,6 @@ function show() {
     const qData = selected[cur];
     let options = qData.a.map((text, index) => ({ text, index }));
     options.sort(() => 0.5 - Math.random());
-
     document.getElementById("counter").innerText = "Vraag " + (cur + 1) + "/" + totalQuestions;
     document.getElementById("q-text").innerText = qData.q;
     
