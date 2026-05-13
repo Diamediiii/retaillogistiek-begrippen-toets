@@ -118,6 +118,55 @@
             box-shadow: 0 0 10px rgba(255, 235, 59, 0.4);
         }
 
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--hoogvliet-green);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .card h2 {
+            color: var(--hoogvliet-green);
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .card-tag {
+            margin-top: 15px;
+            background: var(--hoogvliet-blue);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
         footer {
             margin-top: 60px;
             color: var(--text-dim);
@@ -148,6 +197,15 @@
             <p>Oefen met rekenformules voor omzetsnelheid, voorraadwaardering en dervingspercentages.</p>
         </a>
     </div>
+
+    <div class="card" onclick="location.href='keuze_toets.html'">
+    <div class="card-icon">⚙️</div>
+    <div class="card-content">
+        <h2>Keuze Toets</h2>
+        <p>Bepaal zelf hoeveel vragen je wilt oefenen en test je kennis op maat.</p>
+        <span class="card-tag">Custom Lengte</span>
+    </div>
+</div>
 
     <footer>&copy; 2026 Hoogvliet Oefentraining - Retaillogistiek MBO 4</footer>
 
