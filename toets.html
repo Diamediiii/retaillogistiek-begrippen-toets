@@ -360,7 +360,7 @@ function end() {
     document.getElementById("result-area").style.display = "block";
     document.getElementById("final-score").innerText = score + "/30";
     if (score >= 17) { // 17 van de 30 is een voldoende (55%+)
-        //triggerFeest();
+        triggerFeest();
     }
     const log = document.getElementById("error-log");
     log.innerHTML = "";
