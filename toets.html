@@ -124,6 +124,7 @@
     </style>
 </head>
 <body>
+<canvas id="fireworks-canvas"></canvas>    
 <div class="container">
     <div class="header">
     <h1>Oefentoets Retaillogistiek</h1>
@@ -318,8 +319,6 @@ function show() {
     });
 }
 
-    
-
 function handleNext() {
     if (choice === null) return alert("Selecteer een antwoord!");
     if (choice === selected[cur].c) score++;
@@ -329,32 +328,7 @@ function handleNext() {
     if (cur < 30) show();
     else end();
 }
-
-function triggerFeest() {
-    const duration = 3 * 1000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
-        }
-
-        const particleCount = 50 * (timeLeft / duration);
-        // Vuurwerk van links en rechts
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-    }, 250);
-}    
-
-
-
+    
 function end() {
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
@@ -366,6 +340,26 @@ function end() {
     log.innerHTML = "";
     errors.forEach(e => {
         log.innerHTML += `<div class="error-card"><b>${e.q}</b><br><span style="color:red">Jouw antwoord: ${e.u}</span><br><span style="color:green">Juist: ${e.c}</span></div>`;
+    });
+}
+    
+// Vuurwerk effect
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function startFireworks() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; loop(); }
+function loop() {
+    requestAnimationFrame(loop);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(Math.random() < 0.1) {
+        let x = Math.random()*canvas.width, y = Math.random()*canvas.height/2;
+        for(let i=0; i<20; i++) particles.push({x, y, a:Math.random()*Math.PI*2, s:Math.random()*3+1, l:1});
+    }
+    particles.forEach((p,i) => {
+        p.x += Math.cos(p.a)*p.s; p.y += Math.sin(p.a)*p.s + 0.1; p.l -= 0.02;
+        ctx.fillStyle = `rgba(134,188,37,${p.l})`;
+        ctx.beginPath(); ctx.arc(p.x,p.y,2,0,7); ctx.fill();
+        if(p.l <= 0) particles.splice(i,1);
     });
 }
 
