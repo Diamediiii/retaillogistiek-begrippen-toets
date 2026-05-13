@@ -333,9 +333,7 @@ function end() {
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
     document.getElementById("final-score").innerText = score + "/30";
-    if (score >= 17) { // 17 van de 30 is een voldoende (55%+)
-        triggerFeest();
-    }
+    if(score > 17) startFireworks();
     const log = document.getElementById("error-log");
     log.innerHTML = "";
     errors.forEach(e => {
