@@ -136,11 +136,14 @@
         <button onclick="handleNext()" style="margin-top:20px;">Volgende Vraag</button>
     </div>
     <div id="result-area">
-        <h2>Toets voltooid! Score: <span id="final-score"></span></h2>
-        <p>Hieronder zie je de begrippen die je nog moet oefenen:</p>
-        <div id="error-log"></div>
-        <button onclick="location.reload()" style="background:#4299e1;">Nieuwe Toets (30 andere vragen)</button>
-    </div>
+    <h2>Toets voltooid!</h2>
+    <div class="score-display"><span id="final-score"></span></div>
+    <p id="grade-text"></p>
+    <div id="error-log"></div>
+    
+    <button onclick="location.reload()">Opnieuw Proberen</button>
+    <button onclick="window.location.href='index.html'" style="background: var(--hoogvliet-blue); color: white; margin-top: 10px;">Terug naar Home</button>
+</div>
 </div>
 
 <script>
