@@ -129,16 +129,19 @@
 
     <!-- START CARD -->
     <div id="setup-area" class="content">
-        <div class="setup-card">
-            <h2>Kies Lengte Toets</h2>
-            <p>Hoeveel vragen wil je oefenen?</p>
-            <div class="input-group">
-                <input type="number" id="question-count" value="10" min="1" max="125">
-            </div>
-            <button onclick="preStart()">Start Toets</button>
-            <p style="font-size: 0.8em; color: var(--text-dim); margin-top: 15px;">Max: 125 vragen beschikbaar</p>
+    <div class="setup-card">
+        <h2>Kies Lengte Toets</h2>
+        <p>Hoeveel vragen wil je oefenen?</p>
+        <div class="input-group">
+            <input type="number" id="question-count" value="10" min="1" max="125">
         </div>
+        <button onclick="preStart()">Start Toets</button>
+        
+        <button onclick="window.location.href='index.html'" style="background: transparent; color: var(--text-dim); border: 1px solid var(--text-dim); margin-top: 15px; font-size: 0.9em;">Annuleren / Terug</button>
+        
+        <p style="font-size: 0.8em; color: var(--text-dim); margin-top: 15px;">Max: 125 vragen beschikbaar</p>
     </div>
+</div>
 
     <!-- QUIZ AREA -->
     <div id="quiz-area" class="content">
