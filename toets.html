@@ -233,7 +233,45 @@ const fullpool = [
     {q: "Retouren zijn...", a: ["Goederen die teruggaan naar de leverancier", "Vast terugkomende producten", "Klanten die terugkomen", "Lege kratten en flessen"], c: 0},
     {q: "Sensitiviteit is...", a: ["Gevoeligheid voor signalen van onraad", "Snelheid van de handscanner", "Vriendelijkheid naar klanten", "De nauwkeurigheid van de weegschaal"], c: 0},
     {q: "Sociale veiligheid is...", a: ["Bescherming tegen agressie en geweld", "De verzekering van het personeel", "Samen lunchen", "Vriendelijk omgaan met klasgenoten"], c: 0},
-    {q: "Winkelontzegging is...", a: ["Verbod om de winkel te betreden", "De winkel ontruimen", "Op staande voet ontslagen worden", "Een tijdelijk verbod voor groepen jongeren"], c: 0}
+    {q: "Winkelontzegging is...", a: ["Verbod om de winkel te betreden", "De winkel ontruimen", "Op staande voet ontslagen worden", "Een tijdelijk verbod voor groepen jongeren"], c: 0},
+    // Nieuwe begrippen en casussen voor de fullPool
+    {q: "Externe goederenstroom is...", a: ["Goederenbeweging tussen de leverancier en het distributiecentrum/winkel", "Verplaatsing van goederen binnen het magazijn", "Het transport van de klant naar huis", "De retourstroom van emballage naar de leverancier"], c: 0},
+    {q: "Kwalitatieve controle is...", a: ["Controleren of de goederen onbeschadigd en van de juiste kwaliteit zijn", "Het tellen van het aantal binnengekomen colli", "Het vergelijken van de pakbon met de bestelling", "Controleren of de vrachtwagen op tijd is gekomen"], c: 0},
+    {q: "Interne goederenstroom is...", a: ["Goederenbeweging binnen de muren van het eigen bedrijf", "Goederen die van de leverancier naar de winkel gaan", "Het verzenden van pakketten naar klanten", "De stroom van facturen tussen afdelingen"], c: 0},
+    {q: "Levering onder rembours is...", a: ["Betalen aan de chauffeur op het moment van aflevering", "Betalen binnen 30 dagen na levering", "Vooruitbetalen via een bankoverschrijving", "Een levering die gratis wordt bezorgd"], c: 0},
+    {q: "Niet-franco levering is...", a: ["De koper betaalt zelf de transportkosten", "De leverancier betaalt de transportkosten", "De levering is gratis bij een minimale besteding", "De goederen worden niet aan de deur geleverd"], c: 0},
+    {q: "Retourgoederen zijn...", a: ["Goederen die vanuit de winkel teruggaan naar de leverancier of het DC", "Producten die de klant in het schap laat liggen", "Nieuwe artikelen die net zijn binnengekomen", "Producten die over de datum zijn en worden weggegooid"], c: 0},
+    {q: "Cijfercode is...", a: ["Een identificatiecode die alleen uit getallen bestaat", "Een code met letters en cijfers door elkaar", "De streepjescode op een verpakking", "De pincode van de handterminal"], c: 0},
+    {q: "Koelcel is...", a: ["Geïsoleerde ruimte voor opslag tussen 0°C en 7°C", "Ruimte waar het minimaal -18°C is", "De plek waar de emballage wordt opgeslagen", "Een afgesloten kast voor dure drank"], c: 0},
+    {q: "Ompakken is...", a: ["Goederen uit de ene verpakking in een andere verpakking doen", "Het splitsen van een zending over twee vrachtwagens", "Producten voorzien van een nieuwe prijssticker", "Artikelen van de vrachtwagen op een rolcontainer zetten"], c: 0},
+    {q: "Semivrijelocatiesysteem is...", a: ["Vaste vakken voor artikelgroepen, maar vrije plek binnen dat vak", "Een systeem waarbij je overal mag staan met je reachtruck", "Elk individueel artikel heeft een vastgezet nummer", "Goederen worden alleen buiten het magazijn opgeslagen"], c: 0},
+    {q: "Arbodienst is...", a: ["Organisatie die werkgevers en werknemers adviseert over gezond en veilig werken", "De politie die controleert op winkeldiefstal", "De servicedesk voor kapotte koelingen", "De afdeling die de personeelsplanning maakt"], c: 0},
+    {q: "Arbeidsomstandighedenwet is...", a: ["Kaderwet met algemene regels voor veiligheid en gezondheid op de werkvloer", "Wet die bepaalt hoeveel salaris je krijgt", "Regels over hoe lang je pauze mag houden", "Wet die ontslagrecht regelt"], c: 0},
+    {q: "Arbocatalogus is...", a: ["Document waarin werkgevers en werknemers beschrijven hoe ze aan de Arbowet voldoen", "Een lijst met alle boetes die de Arbo kan geven", "Een gids met veiligheidsschoenen en werkkleding", "Het overzicht van alle zieke medewerkers"], c: 0},
+    {q: "Behandelingsetiket is...", a: ["Sticker op een doos die aangeeft hoe je ermee moet omgaan (bijv. 'breekbaar')", "Het prijsetiket op het schap", "Een sticker voor producten die bijna over datum zijn", "Het verzendlabel met het adres van de klant"], c: 0},
+    
+    // Inzichtvragen / Casussen
+    {q: "Een medewerker maakt een verpakking koekjes kapot en eet deze op. Welke vorm van derving is dit?", a: ["Criminele derving", "Bekende derving", "Administratieve derving", "Test derving"], c: 0},
+    {q: "Je telt 10 potten pindakaas in het schap, maar de computer zegt dat er 12 moeten staan. Hoe noem je dit?", a: ["Onbekende derving", "Bekende derving", "Kwantitatieve controle", "Service Sweethearting"], c: 0},
+    {q: "Een klant rekent een krat bier af, maar de caissière 'vergeet' de zak chips die eronder ligt te scannen voor een vriend. Dit is:", a: ["Service Sweethearting", "Kwantitatieve derving", "Diefstal derving", "Acquisitiefraude"], c: 0},
+    {q: "Er valt een fles wijn kapot tijdens het vullen. Je voert dit direct in op de terminal. Dit is:", a: ["Bekende derving", "Onbekende derving", "Criminele derving", "Risico derving"], c: 0},
+    // Extra Inzichtvragen & Casussen
+    {q: "Een pallet met frisdrank wordt geleverd. Je telt de colli en controleert op gaten in de verpakking. Wat voor soort controle is dit?", a: ["Zowel kwantitatieve als kwalitatieve controle", "Alleen een administratieve controle", "Een integrale inventarisatie", "Een controle op de economische voorraad"], c: 0},
+    {q: "De vrachtwagenchauffeur levert 10 kratten bananen, maar op de pakbon staan er 12. Je maakt hiervan een melding op de:", a: ["Correctielijst", "Visitatie-lijst", "Besteleenheid", "Arbocatalogus"], c: 0},
+    {q: "Bij de kassa ziet een medewerker een klant met een jas die erg bol staat. De medewerker vraagt of hij in de tas mag kijken. Dit heet:", a: ["Visitatie", "Reclameren", "Psychosociale arbeidsbelasting", "Integrale controle"], c: 1},
+    {q: "De winkel heeft veel restafval van plastic en karton. Het proces van het inzamelen tot het verwerken hiervan noem je de:", a: ["Afvalstroom", "Interne goederenstroom", "Duurzaam werken", "Retourstroom"], c: 0},
+    {q: "Een medewerker klaagt over rugpijn door het verkeerd tillen van zware kratten. Onder welk gebied valt dit?", a: ["Ergonomie", "Sociale veiligheid", "Servicegraad", "Vitaliteit"], c: 0},
+    {q: "De afdeling brood krijgt elke ochtend vers brood geleverd. Dit zijn artikelen met een zeer hoge omzetsnelheid, ook wel:", a: ["Fastmovers", "Slowmovers", "Pijplijnvoorraad", "Seizoenvoorraad"], c: 0},
+    {q: "Je bestelt producten die pas over 2 dagen geleverd worden. Deze producten zijn onderweg, maar nog niet in de winkel. Dit is de:", a: ["Pijplijnvoorraad", "Technische voorraad", "Veiligheidsvoorraad", "Economische voorraad"], c: 0},
+    {q: "Een leverancier brengt een nieuwe display voor de actie van volgende week. De voorraad die hiervoor extra binnenkomt is de:", a: ["Actievoorraad", "Minimumvoorraad", "IJzeren voorraad", "Grijpvoorraad"], c: 0},
+    {q: "Tijdens een drukke zaterdag is er veel stress bij de kassa's door lange rijen. Dit valt onder de noemer:", a: ["Psychosociale arbeidsbelasting (PSA)", "Fysieke arbeidsbelasting", "Overbelasting voor medewerker", "Stressbestendig werken"], c: 0},
+    {q: "Je ziet op het scherm dat een artikel 'uitverkocht' is, maar je vindt nog twee dozen achterin het magazijn. Wat klopt er niet?", a: ["De administratieve voorraad", "De besteleenheid", "De levertijd", "De omzetsnelheid"], c: 0},
+    {q: "Een medewerker plaatst de nieuwe melk achter de oude melk in de koeling. Welk principe past hij toe?", a: ["FIFO (First In, First Out)", "LIFO (Last In, First Out)", "JIT (Just In Time)", "6S-methode"], c: 0},
+    {q: "In de kantine hangt een poster met regels over hoe je moet handelen bij een overval. Dit is onderdeel van het:", a: ["Beveiligingsplan", "Bedrijf ontruimingsplan", "Visitatiereglement", "RAAK systeem"], c: 0},
+    {q: "Er wordt een nieuwe koeling geplaatst. De medewerkers moeten een training volgen over hoe ze hier veilig mee werken. Waar staat dit beschreven?", a: ["Arbodienst / Arbobeleid", "CAO beleid", "Bedrijfshulp plan", "Plan vanuit hoofdkantoor"], c: 0},
+    {q: "Een klant wil een oude frituurpan inleveren bij aankoop van een nieuwe. Welke regeling verplicht de winkel dit aan te nemen?", a: ["Oud-voor-nieuw regeling", "HACCP-regeling", "Verekening met de klant", "Emballage-wet"], c: 0},
+    {q: "De bedrijfsleider berekent hoeveel geld er verloren is gegaan aan kapotte producten en diefstal. Hij kijkt naar de:", a: ["Werkelijke derving", "Brutowinst", "Tellingen in de terminal", "Servicegraad"], c: 0},
+    {q: "Een product wordt uit het assortiment gehaald. De laatste artikelen worden met 50% korting verkocht. Dit beïnvloedt de:", a: ["Netto-omzet", "Inkoopwaarde", "Vaste locaties", "Bestelfrequentie"], c: 0}
 ];
 
 let selected = [];
