@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retail Manager Examens</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -121,20 +122,10 @@
             .header h1 { font-size: 1.2em; }
             .quiz-content { padding: 20px; }
         }
-
-        #fireworks-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Zorg dat je door het vuurwerk heen kunt klikken */
-            z-index: -1; /* Zet het vuurwerk ACHTER de container */
 }
     </style>
 </head>
 <body>
-<canvas id="fireworks-canvas"></canvas>    
 <div class="container">
     <div class="header">
     <h1>Oefentoets Retaillogistiek</h1>
