@@ -341,6 +341,33 @@ function handleNext() {
     if (cur < 30) show();
     else end();
 }
+
+function startFireworks() {
+    const duration = 5 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) return clearInterval(interval);
+
+        const particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+            colors: ['#86bc25', '#004c97', '#ffffff'] 
+        }));
+        confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+            colors: ['#86bc25', '#004c97', '#ffffff']
+        }));
+    }, 250);
+} 
     
 function end() {
     // 1. Schermen wisselen
@@ -353,6 +380,11 @@ function end() {
     let grade = (score / 30) * 10;
     document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
 
+    // Bij een 5.5 of hoger start het vuurwerk
+    if (parseFloat(grade) >= 5.5) {
+        startFireworks();
+    }
+    
     // 3. Foutenlijst opbouwen
     const log = document.getElementById("error-log");
     log.innerHTML = "";
@@ -367,50 +399,8 @@ function end() {
                 </div>`;
         });
     }
-
-    // 4. Alleen vuurwerk bij een voldoende (score 17 of hoger)
-    if (score >= 17) {
-        initFireworks(); 
-    }
 }
-
-// Verbeterde Vuurwerk Functies
-function initFireworks() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    fireworksLoop();
-}
-
-function fireworksLoop() {
-    requestAnimationFrame(fireworksLoop);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    if(Math.random() < 0.1) {
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * (canvas.height / 2);
-        for(let i=0; i<20; i++) {
-            particles.push({
-                x: x, 
-                y: y, 
-                a: Math.random() * Math.PI * 2, 
-                s: Math.random() * 3 + 1, 
-                l: 1
-            });
-        }
-    }
-    
-    particles.forEach((p, i) => {
-        p.x += Math.cos(p.a) * p.s;
-        p.y += Math.sin(p.a) * p.s + 0.1;
-        p.l -= 0.02;
-        ctx.fillStyle = `rgba(134, 188, 37, ${p.l})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, 7);
-        ctx.fill();
-        if(p.l <= 0) particles.splice(i, 1);
-    });
-}
-
 start();
 </script>
 </body>
