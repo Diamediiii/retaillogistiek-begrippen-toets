@@ -121,6 +121,16 @@
             .header h1 { font-size: 1.2em; }
             .quiz-content { padding: 20px; }
         }
+
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Zorg dat je door het vuurwerk heen kunt klikken */
+            z-index: -1; /* Zet het vuurwerk ACHTER de container */
+}
     </style>
 </head>
 <body>
@@ -333,14 +343,17 @@ function handleNext() {
 }
     
 function end() {
-    // 1. Wissel van scherm: verberg de quiz, toon de resultaten
+    // 1. Schermen wisselen
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
     
-    // 2. Vul de score in op het scherm
+    // 2. Score berekenen en tonen
     document.getElementById("final-score").innerText = score + "/30";
     
-    // 3. Toon de foute antwoorden (indien aanwezig)
+    let grade = (score / 30) * 10;
+    document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
+
+    // 3. Foutenlijst opbouwen
     const log = document.getElementById("error-log");
     log.innerHTML = "";
     if (errors.length > 0) {
@@ -355,29 +368,46 @@ function end() {
         });
     }
 
-    // 4. Start pas daarna het vuurwerk (bij een voldoende)
+    // 4. Alleen vuurwerk bij een voldoende (score 17 of hoger)
     if (score >= 17) {
-        startFireworks(); // Zorg dat de naam exact startFireworks is
+        initFireworks(); 
     }
 }
+
+// Verbeterde Vuurwerk Functies
+function initFireworks() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    fireworksLoop();
+}
+
+function fireworksLoop() {
+    requestAnimationFrame(fireworksLoop);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-// Vuurwerk effect
-const canvas = document.getElementById('fireworks-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-function startFireworks() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; loop(); }
-function loop() {
-    requestAnimationFrame(loop);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
     if(Math.random() < 0.1) {
-        let x = Math.random()*canvas.width, y = Math.random()*canvas.height/2;
-        for(let i=0; i<20; i++) particles.push({x, y, a:Math.random()*Math.PI*2, s:Math.random()*3+1, l:1});
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * (canvas.height / 2);
+        for(let i=0; i<20; i++) {
+            particles.push({
+                x: x, 
+                y: y, 
+                a: Math.random() * Math.PI * 2, 
+                s: Math.random() * 3 + 1, 
+                l: 1
+            });
+        }
     }
-    particles.forEach((p,i) => {
-        p.x += Math.cos(p.a)*p.s; p.y += Math.sin(p.a)*p.s + 0.1; p.l -= 0.02;
-        ctx.fillStyle = `rgba(134,188,37,${p.l})`;
-        ctx.beginPath(); ctx.arc(p.x,p.y,2,0,7); ctx.fill();
-        if(p.l <= 0) particles.splice(i,1);
+    
+    particles.forEach((p, i) => {
+        p.x += Math.cos(p.a) * p.s;
+        p.y += Math.sin(p.a) * p.s + 0.1;
+        p.l -= 0.02;
+        ctx.fillStyle = `rgba(134, 188, 37, ${p.l})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, 7);
+        ctx.fill();
+        if(p.l <= 0) particles.splice(i, 1);
     });
 }
 
