@@ -333,15 +333,32 @@ function handleNext() {
 }
     
 function end() {
+    // 1. Wissel van scherm: verberg de quiz, toon de resultaten
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
+    
+    // 2. Vul de score in op het scherm
     document.getElementById("final-score").innerText = score + "/30";
-    if(score > 17) startFireworks();
+    
+    // 3. Toon de foute antwoorden (indien aanwezig)
     const log = document.getElementById("error-log");
     log.innerHTML = "";
-    errors.forEach(e => {
-        log.innerHTML += `<div class="error-card"><b>${e.q}</b><br><span style="color:red">Jouw antwoord: ${e.u}</span><br><span style="color:green">Juist: ${e.c}</span></div>`;
-    });
+    if (errors.length > 0) {
+        log.innerHTML = "<h3>Verbeterpunten:</h3>";
+        errors.forEach(e => {
+            log.innerHTML += `
+                <div class="error-card">
+                    <b>${e.q}</b><br>
+                    <span style="color:#f87171">Jouw antwoord: ${e.u}</span><br>
+                    <span style="color:#86bc25">Juist: ${e.c}</span>
+                </div>`;
+        });
+    }
+
+    // 4. Start pas daarna het vuurwerk (bij een voldoende)
+    if (score >= 17) {
+        startFireworks(); // Zorg dat de naam exact startFireworks is
+    }
 }
     
 // Vuurwerk effect
