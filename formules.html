@@ -4,27 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rekenen - Hoogvliet Academy</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --bg-color: #0f172a; --card-bg: #1e293b; --hoogvliet-blue: #004c97; --hoogvliet-green: #86bc25; --text-main: #f8fafc; --text-dim: #94a3b8; --error: #ef4444; }
+        :root { 
+            --bg-color: #0f172a; 
+            --card-bg: #1e293b; 
+            --hoogvliet-blue: #004c97; 
+            --hoogvliet-green: #86bc25; 
+            --text-main: #f8fafc; 
+            --text-dim: #94a3b8; 
+            --error: #ef4444; 
+        }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
         .container { width: 95%; max-width: 600px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative; z-index: 10; }
         .header { background: linear-gradient(135deg, var(--hoogvliet-blue), #003366); padding: 25px; text-align: center; border-bottom: 4px solid var(--hoogvliet-green); }
+        .header h1 { margin: 0; font-size: 1.8em; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
         .quiz-content { padding: 30px; }
         #q-text { font-size: 1.1em; line-height: 1.6; margin-bottom: 20px; min-height: 120px; }
-        input[type="text"] { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.2em; text-align: center; box-sizing: border-box; outline: none; margin: 10px 0; }
-        input[type="text"]:focus { border-color: var(--hoogvliet-blue); }
+        input[type="text"] { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.2em; text-align: center; box-sizing: border-box; outline: none; margin: 10px 0; transition: 0.3s; }
+        input[type="text"]:focus { border-color: var(--hoogvliet-blue); background: rgba(255,255,255,0.08); }
         #feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; line-height: 1.4; }
         .feedback-correct { background: rgba(134, 188, 37, 0.2); border: 1px solid var(--hoogvliet-green); color: var(--hoogvliet-green); }
         .feedback-wrong { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: #fca5a5; }
-        button { width: 100%; padding: 18px; background: var(--hoogvliet-green); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
+        button { width: 100%; padding: 18px; background: var(--hoogvliet-green); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: 0.2s; }
+        button:hover { filter: brightness(1.1); }
         #next-btn { background: var(--hoogvliet-blue); color: white; display: none; }
         #result-area { display: none; text-align: center; }
-        canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
     </style>
 </head>
 <body>
-
-<canvas id="fireworks-canvas"></canvas>
 
 <div class="container">
     <div class="header"><h1>Rekenen & Kengetallen</h1></div>
@@ -41,9 +49,10 @@
         <div id="result-area">
             <h2 style="font-size: 2.2em; margin-bottom: 10px;">Toets voltooid! ✨</h2>
             <div id="final-score" style="font-size: 3em; color: var(--hoogvliet-green); margin: 20px 0; font-weight: 800;"></div>
+            <p id="grade-text" style="font-size: 1.2em; margin-bottom: 10px; color: white;"></p>
             <p id="congrats-text" style="color: var(--text-dim); margin-bottom: 30px;"></p>
             <button onclick="location.reload()">Opnieuw Starten</button>
-            <button onclick="window.location.href='index.html'" style="background: #334155; color: white; margin-top: 10px;">Menu</button>
+            <button onclick="window.location.href='index.html'" style="background: var(--hoogvliet-blue); color: white; margin-top: 10px;">Terug naar Home</button>
         </div>
     </div>
 </div>
@@ -53,7 +62,51 @@ let questions = [];
 let cur = 0;
 let score = 0;
 
+function triggerFeest() {
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#86bc25', '#004c97', '#ffffff']
+    });
+}
+
 function generateQuestions() {
+    // Bestelpunt formule generator (4 varianten)
+    const typeBP = () => {
+        const lt = Math.floor(Math.random() * 3) + 1; // 1, 2 of 3 leverdagen
+        const da = Math.floor(Math.random() * 74) + 7; // Dagafzet tussen 7 en 80
+        const vv = Math.floor(Math.random() * 46) + 5; // Veiligheidsvoorraad tussen 5 en 50
+        const bp = (lt * da) + vv; // Formule: BP = (LT * DA) + VV
+
+        const variant = Math.floor(Math.random() * 4);
+        if (variant === 0) {
+            return {
+                q: `<b>Bereken het Bestelpunt (BP):</b><br><br>Levertijd (LT): ${lt} dagen<br>Dagafzet (DA): ${da} stuks per dag<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                c: bp,
+                exp: `Uitleg: Bestelpunt = (Levertijd × Dagafzet) + Veiligheidsvoorraad<br>(${lt} × ${da}) + ${vv} = ${bp}`
+            };
+        } else if (variant === 1) {
+            return {
+                q: `<b>Bereken de Veiligheidsvoorraad (VV):</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Levertijd (LT): ${lt} dagen<br>Dagafzet (DA): ${da} stuks per dag`,
+                c: vv,
+                exp: `Uitleg: Veiligheidsvoorraad = Bestelpunt - (Levertijd × Dagafzet)<br>${bp} - (${lt} × ${da}) = ${vv}`
+            };
+        } else if (variant === 2) {
+            return {
+                q: `<b>Bereken de Dagafzet (DA):</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Levertijd (LT): ${lt} dagen<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                c: da,
+                exp: `Uitleg: Dagafzet = (Bestelpunt - Veiligheidsvoorraad) / Levertijd<br>(${bp} - ${vv}) / ${lt} = ${da}`
+            };
+        } else {
+            return {
+                q: `<b>Bereken de Levertijd (LT) in dagen:</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Dagafzet (DA): ${da} stuks per dag<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                c: lt,
+                exp: `Uitleg: Levertijd = (Bestelpunt - Veiligheidsvoorraad) / Dagafzet<br>(${bp} - ${vv}) / ${da} = ${lt} dagen`
+            };
+        }
+    };
+
     const typeEV = () => {
         const tv = Math.floor(Math.random() * 500) + 200, bo = Math.floor(Math.random() * 100) + 20, vl = Math.floor(Math.random() * 50) + 10;
         const ans = tv + bo - vl;
@@ -97,7 +150,6 @@ function generateQuestions() {
             const w = Math.floor(Math.random() * 400) + 600;
             const nm = mnd[start + i];
             lijst.push(w);
-            // De 0,5 regel wordt hier stil toegepast
             som += (i === 0 || i === amt - 1) ? 0.5 * w : w;
             tekst += `${nm}: ${w}<br>`;
         }
@@ -113,7 +165,8 @@ function generateQuestions() {
         };
     };
 
-    let pool = [typeOS(), typeOS(), typeOD(), typeOD(), typeSG(), typeSG(), typeEV(), typeGV2(), typeGV3(), typeGV3()];
+    // Pool met 3x de nieuwe Bestelpunt-varianten en de rest van de rekenformules
+    let pool = [typeBP(), typeBP(), typeBP(), typeOS(), typeOD(), typeSG(), typeEV(), typeGV2(), typeGV3(), typeGV3()];
     questions = pool.sort(() => 0.5 - Math.random());
 }
 
@@ -145,7 +198,7 @@ function checkAnswer() {
         fb.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
     } else {
         fb.className = "feedback-wrong";
-        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>${q.c}</b>.<br>${q.exp}`;
+        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>${q.c}</b>.<br><br>${q.exp}`;
     }
 }
 
@@ -159,33 +212,27 @@ function end() {
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
     document.getElementById("final-score").innerText = `${score} / 10`;
-    document.getElementById("congrats-text").innerText = score > 5 ? "Gefeliciteerd! Je bent klaar voor het examen." : "Nog even oefenen, je komt er wel!";
-    if(score > 5) startFireworks();
-}
-
-// Vuurwerk effect
-const canvas = document.getElementById('fireworks-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-function startFireworks() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; loop(); }
-function loop() {
-    requestAnimationFrame(loop);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(Math.random() < 0.1) {
-        let x = Math.random()*canvas.width, y = Math.random()*canvas.height/2;
-        for(let i=0; i<20; i++) particles.push({x, y, a:Math.random()*Math.PI*2, s:Math.random()*3+1, l:1});
+    
+    // Cijfer berekenen
+    let grade = (score / 10) * 10;
+    document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
+    
+    document.getElementById("congrats-text").innerText = score >= 6 ? "Gefeliciteerd! Je hebt een voldoende en bent klaar voor het examen." : "Nog even oefenen met de formules, je komt er wel!";
+    
+    // Confetti feestje vanaf een voldoende (cijfer 6 of hoger)
+    if (score >= 6) {
+        triggerFeest();
     }
-    particles.forEach((p,i) => {
-        p.x += Math.cos(p.a)*p.s; p.y += Math.sin(p.a)*p.s + 0.1; p.l -= 0.02;
-        ctx.fillStyle = `rgba(134,188,37,${p.l})`;
-        ctx.beginPath(); ctx.arc(p.x,p.y,2,0,7); ctx.fill();
-        if(p.l <= 0) particles.splice(i,1);
-    });
 }
 
 generateQuestions();
 show();
-document.getElementById("user-input").onkeypress = (e) => { if(e.key === "Enter") document.getElementById("check-btn").style.display !== "none" ? checkAnswer() : nextQuestion(); };
+
+document.getElementById("user-input").onkeypress = (e) => { 
+    if(e.key === "Enter") {
+        document.getElementById("check-btn").style.display !== "none" ? checkAnswer() : nextQuestion();
+    }
+};
 </script>
 </body>
 </html>
