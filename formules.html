@@ -247,7 +247,7 @@ function show() {
 }
 
 function checkAnswer() {
-    // Stripped nu automatisch ook eurotekens en corrigeert komma's naar punten
+    // Stripped automatisch eurotekens, procenten en spaties, en zet komma's om naar punten
     const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').replace('€', '').trim();
     if (val === "") return;
     const q = questions[cur];
@@ -263,7 +263,12 @@ function checkAnswer() {
         fb.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
     } else {
         fb.className = "feedback-wrong";
-        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>€${q.c.toString().replace('.', ',')}</b>.<br><br>${q.exp}`;
+        
+        // Controleer of de vraag over euro's gaat (als het woord '€' of 'omzet' in de vraag staat)
+        const isGeld = q.q.toLowerCase().includes('€') || q.q.toLowerCase().includes('omzet');
+        const antwoordWeergave = isGeld ? `€${q.c.toString().replace('.', ',')}` : q.c.toString().replace('.', ',');
+
+        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>${antwoordWeergave}</b>.<br><br>${q.exp}`;
     }
 }
 
