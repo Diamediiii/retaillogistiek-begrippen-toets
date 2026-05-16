@@ -165,10 +165,49 @@ function generateQuestions() {
         };
     };
 
-    // Pool met 3x de nieuwe Bestelpunt-varianten en de rest van de rekenformules
-    let pool = [typeBP(), typeBP(), typeBP(), typeOS(), typeOD(), typeSG(), typeEV(), typeGV2(), typeGV3(), typeGV3()];
+    const typeNO = () => {
+        // Kies willekeurig tussen 9% BTW (supermarkt food) of 21% BTW (non-food)
+        const btwPercentage = Math.random() < 0.5 ? 9 : 21;
+        
+        // Genereer een mooie netto omzet als basis (tussen €1000 en €9000, rond getal)
+        const netto = Math.floor(Math.random() * 81 + 10) * 100;
+        
+        // Bereken de BTW en de consumentenomzet (netto * 1.09 of 1.21)
+        const btwBedrag = netto * (btwPercentage / 100);
+        const consumentenomzet = netto + btwBedrag;
+
+        // Kies willekeurig of ze de Netto-omzet of het BTW-bedrag moeten berekenen
+        const variant = Math.random() < 0.5;
+        
+        if (variant) {
+            return {
+                q: `<b>Bereken de Netto-omzet:</b><br><br>De consumentenomzet (inclusief BTW) van de afdeling bedraagt <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br>Het BTW-tarief op deze productgroep is <b>${btwPercentage}%</b>.`,
+                c: netto,
+                exp: `Uitleg: Netto-omzet = Consumentenomzet / (1 + (BTW-percentage / 100))<br>€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}`
+            };
+        } else {
+            return {
+                q: `<b>Bereken het BTW-bedrag in euro's:</b><br><br>De consumentenomzet (inclusief BTW) bedraagt <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br>Op deze producten zit <b>${btwPercentage}%</b> BTW.`,
+                c: btwBedrag.toFixed(2), // Rond af op 2 decimalen voor geld
+                exp: `Uitleg: Bereken eerst de netto-omzet (€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}).<br>Het BTW-bedrag is het verschil: €${consumentenomzet.toFixed(2).replace('.', ',')} - €${netto} = €${btwBedrag.toFixed(2).replace('.', ',')}`
+            };
+        }
+    };
+
+    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').replace('€', '').trim();
+
+    // Pool met de formules (inclusief de nieuwe netto-omzet variant)
+    let pool = [
+        typeBP(), typeBP(), 
+        typeNO(), typeNO(), // Onze nieuwe formule!
+        typeOS(), 
+        typeOD(), 
+        typeSG(), 
+        typeEV(), 
+        typeGV2(), 
+        typeGV3()
+    ];
     questions = pool.sort(() => 0.5 - Math.random());
-}
 
 function show() {
     const q = questions[cur];
