@@ -72,47 +72,107 @@ function triggerFeest() {
 }
 
 function generateQuestions() {
-    // Bestelpunt formule generator (4 varianten)
+    // 1. Bestelpunt Casus Generator
     const typeBP = () => {
-        const lt = Math.floor(Math.random() * 3) + 1; // 1, 2 of 3 leverdagen
-        const da = Math.floor(Math.random() * 74) + 7; // Dagafzet tussen 7 en 80
-        const vv = Math.floor(Math.random() * 46) + 5; // Veiligheidsvoorraad tussen 5 en 50
-        const bp = (lt * da) + vv; // Formule: BP = (LT * DA) + VV
+        const lt = Math.floor(Math.random() * 3) + 1; 
+        const da = Math.floor(Math.random() * 74) + 7; 
+        const vv = Math.floor(Math.random() * 46) + 5; 
+        const bp = (lt * da) + vv; 
+
+        const namen = ["Daan", "Lisa", "Kevin", "Sarah", "Mohammed", "Amber"];
+        const manager = namen[Math.floor(Math.random() * namen.length)];
+        const producten = ["kratten bier", "pakken halfvolle melk", "potten pastasaus", "stuks brood", "potten pindakaas"];
+        const product = producten[Math.floor(Math.random() * producten.length)];
 
         const variant = Math.floor(Math.random() * 4);
         if (variant === 0) {
             return {
-                q: `<b>Bereken het Bestelpunt (BP):</b><br><br>Levertijd (LT): ${lt} dagen<br>Dagafzet (DA): ${da} stuks per dag<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                q: `<b>Casus Bestelmanagement:</b><br><br>${manager} is de voorraad van de vulploeg aan het controleren. De winkel verkoopt gemiddeld <b>${da} ${product} per dag</b>. Het distributiecentrum heeft <b>${lt} dagen</b> nodig om een nieuwe bestelling te leveren. Om te voorkomen dat het schap leegraakt bij vertraging, houdt de supermarkt een minimale veiligheidsvoorraad aan van <b>${vv} stuks</b>.<br><br>Bij welke voorraadhoogte (het Bestelpunt) moet ${manager} de handterminal pakken om een nieuwe bestelling te plaatsen?`,
                 c: bp,
-                exp: `Uitleg: Bestelpunt = (Levertijd × Dagafzet) + Veiligheidsvoorraad<br>(${lt} × ${da}) + ${vv} = ${bp}`
+                exp: `Uitleg: Bestelpunt = (Levertijd × Dagafzet) + Veiligheidsvoorraad<br>(${lt} × ${da}) + ${vv} = ${bp} stuks.`
             };
         } else if (variant === 1) {
             return {
-                q: `<b>Bereken de Veiligheidsvoorraad (VV):</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Levertijd (LT): ${lt} dagen<br>Dagafzet (DA): ${da} stuks per dag`,
+                q: `<b>Casus Veiligheidsvoorraad:</b><br><br>Op de afdeling kruidenierswaren is het automatische bestelsysteem (AVV) ingesteld op een bestelpunt of drempelwaarde van <b>${bp} ${product}</b>. Afdelingsmanager ${manager} weet dat de vrachtwagen er altijd exact <b>${lt} dagen</b> over doet om de bestelling te leveren. De gemiddelde dagelijkse verkoop van dit product is <b>${da} stuks</b>.<br><br>Hoeveel stuks heeft de supermarkt als extra veiligheidsvoorraad (VV) in het systeem staan?`,
                 c: vv,
-                exp: `Uitleg: Veiligheidsvoorraad = Bestelpunt - (Levertijd × Dagafzet)<br>${bp} - (${lt} × ${da}) = ${vv}`
+                exp: `Uitleg: Veiligheidsvoorraad = Bestelpunt - (Levertijd × Dagafzet)<br>${bp} - (${lt} × ${da}) = ${vv} stuks.`
             };
         } else if (variant === 2) {
             return {
-                q: `<b>Bereken de Dagafzet (DA):</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Levertijd (LT): ${lt} dagen<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                q: `<b>Casus Schapverkoop:</b><br><br>Teamleider ${manager} ziet in de computer dat het bestelpunt voor ${product} hard is ingesteld op <b>${bp} stuks</b>. De vaste veiligheidsvoorraad in het magazijn is <b>${vv} stuks</b>. Als er een bestelling naar het distributiecentrum wordt gestuurd, duurt het <b>${lt} dagen</b> voordat de vulploeg de rolcontainers kan uitpakken.<br><br>Wat is de gemiddelde dagafzet (DA) van dit product in de winkel?`,
                 c: da,
-                exp: `Uitleg: Dagafzet = (Bestelpunt - Veiligheidsvoorraad) / Levertijd<br>(${bp} - ${vv}) / ${lt} = ${da}`
+                exp: `Uitleg: Dagafzet = (Bestelpunt - Veiligheidsvoorraad) / Levertijd<br>(${bp} - ${vv}) / ${lt} = ${da} stuks per dag.`
             };
         } else {
             return {
-                q: `<b>Bereken de Levertijd (LT) in dagen:</b><br><br>Bestelpunt (BP): ${bp} stuks<br>Dagafzet (DA): ${da} stuks per dag<br>Veiligheidsvoorraad (VV): ${vv} stuks`,
+                q: `<b>Casus Logistieke Keten:</b><br><br>In de supermarkt is er een probleem met de levering van de ${product}. Het bestelpunt staat scherp afgesteld op <b>${bp} stuks</b>, gebaseerd op een dagafzet van <b>${da} stuks</b> en een ijzeren voorraad (veiligheidsvoorraad) van <b>${vv} stuks</b>.<br><br>Hoeveel dagen levertijd (LT) heeft het distributiecentrum volgens deze instellingen nodig om de goederen in de winkel te krijgen?`,
                 c: lt,
-                exp: `Uitleg: Levertijd = (Bestelpunt - Veiligheidsvoorraad) / Dagafzet<br>(${bp} - ${vv}) / ${da} = ${lt} dagen`
+                exp: `Uitleg: Levertijd = (Bestelpunt - Veiligheidsvoorraad) / Dagafzet<br>(${bp} - ${vv}) / ${da} = ${lt} dagen.`
             };
         }
     };
 
-    const typeEV = () => {
-        const tv = Math.floor(Math.random() * 500) + 200, bo = Math.floor(Math.random() * 100) + 20, vl = Math.floor(Math.random() * 50) + 10;
-        const ans = tv + bo - vl;
-        return { q: `<b>Bereken de Economische Voorraad:</b><br><br>Technische voorraad: ${tv}<br>Bestelde goederen: ${bo}<br>Verkochte goederen: ${vl}`, c: ans, exp: `Uitleg: ${tv} + ${bo} - ${vl} = ${ans}` };
+    // 2. Netto Omzet en BTW Casus Generator
+    const typeNO = () => {
+        const btwPercentage = Math.random() < 0.5 ? 9 : 21;
+        const netto = Math.floor(Math.random() * 81 + 10) * 100;
+        const btwBedrag = netto * (btwPercentage / 100);
+        const consumentenomzet = netto + btwBedrag;
+        const variant = Math.random() < 0.5;
+        
+        const afd = btwPercentage === 9 ? "Vers & Agf (9% BTW)" : "Slijterij & Cosmetica (21% BTW)";
+
+        if (variant) {
+            return {
+                q: `<b>Casus Financiële Dagsluiting:</b><br><br>Bij het opmaken van de kassa's op zaterdagavond ziet de hoofdcassière dat er op de afdeling <b>${afd}</b> een totale bruto-omzet is geregistreerd van <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b> via de pin en contanten (consumentenomzet).<br><br>Welk bedrag aan Netto-omzet houdt de supermarkt over voor deze afdeling als de BTW eraf is gehaald?`,
+                c: netto,
+                exp: `Uitleg: Netto-omzet = Consumentenomzet / (1 + (BTW-percentage / 100))<br>€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}`
+            };
+        } else {
+            return {
+                q: `<b>Casus BTW-Afdracht:</b><br><br>De supermarkt moet de wekelijkse belastingaangifte voorbereiden. De kasregisters tonen voor de productgroep <b>${afd}</b> een bruto consumentenomzet van <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br><br>Hoeveel euro van dit bedrag moet de supermarkt als BTW afdragen aan de Belastingdienst?`,
+                c: btwBedrag.toFixed(2),
+                exp: `Uitleg: Netto-omzet is €${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}.<br>Het BTW-bedrag is het verschil: €${consumentenomzet.toFixed(2).replace('.', ',')} - €${netto} = €${btwBedrag.toFixed(2).replace('.', ',')}`
+            };
+        }
     };
 
+    // 3. Economische Voorraad Casus Generator
+    const typeEV = () => {
+        const tv = Math.floor(Math.random() * 500) + 200; 
+        const bo = Math.floor(Math.random() * 100) + 20; 
+        const vl = Math.floor(Math.random() * 50) + 10; 
+        const ans = tv + bo - vl;
+        
+        const namen = ["Tim", "Eva", "Sven", "Sophie"];
+        const manager = namen[Math.floor(Math.random() * namen.length)];
+
+        return { 
+            q: `<b>Casus Voorraadpositie:</b><br><br>Assistent-bedrijfsleider ${manager} doet de administratieve voorraadcontrole voor de diepvriesafdeling. In de computer staat dat er fysiek <b>${tv} dozen</b> in het magazijn en de vriesmeubels liggen (technische voorraad). Er is gisteren een bestelling geplaatst bij het DC voor <b>${bo} dozen</b> die momenteel onderweg is. Tegelijkertijd hebben klanten via de webshop al <b>${vl} dozen</b> gereserveerd en betaald, welke vanmiddag worden opgehaald.<br><br>Wat is de Economische Voorraad (EV) waar ${manager} rekening mee moet houden voor de commerciële planning?`, 
+            c: ans, 
+            exp: `Uitleg: Economische Voorraad = Technische voorraad + Bestelde goederen - Verkochte/Gereserveerde goederen<br>${tv} + ${bo} - ${vl} = ${ans} dozen.` 
+        };
+    };
+
+    // 4. Servicegraad Casus Generator
+    const typeSG = () => {
+        const tot = Math.floor(Math.random() * 1100) + 400;
+        const lev = Math.floor(tot * (Math.random() * 0.15 + 0.82));
+        const gemist = tot - lev;
+        const res = (lev / tot) * 100;
+        const ans = Number.isInteger(res) ? res : res.toFixed(1);
+
+        const afdelingen = ["de versafdeling", "de droge kruidenierswaren", "de non-food afdeling", "de zuivel"];
+        const afd = afdelingen[Math.floor(Math.random() * afdelingen.length)];
+
+        return { 
+            q: `<b>Casus Klanttevredenheid & OOS:</b><br><br>Tijdens een service-audit op <b>${afd}</b> wordt gekeken naar de Out-Of-Stock (OOS) meldingen. In totaal kwamen er gedurende de dag vragen binnen naar <b>${tot} specifieke artikelen</b>. De vulploeg heeft <b>${lev} keer</b> het product direct uit het schap of magazijn aan de klant kunnen overhandigen. Bij de overige <b>${gemist} artikelen</b> moesten ze de klant helaas teleurstellen (nee-verkoop).<br><br>Bereken de servicegraad (SG) van deze afdeling in procenten. <i>(Rond indien nodig af op 1 decimaal)</i>`, 
+            c: ans, 
+            exp: `Uitleg: Servicegraad = (Direct leverbare artikelen / Totaal gevraagde artikelen) × 100%<br>(${lev} / ${tot}) × 100% = ${ans}%.` 
+        };
+    };
+
+    // 5. Omzetsnelheid Generator
     const typeOS = () => {
         const omzet = (Math.floor(Math.random() * 50) + 10) * 100, gv = (Math.floor(Math.random() * 5) + 2) * 100;
         const res = omzet / gv;
@@ -120,26 +180,21 @@ function generateQuestions() {
         return { q: `<b>Bereken de Omzetsnelheid:</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad: €${gv}`, c: ans, exp: `Uitleg: €${omzet} / €${gv} = ${ans}` };
     };
 
+    // 6. Omzetduur Generator
     const typeOD = () => {
         const os = (Math.random() * 4 + 4).toFixed(1);
         const ans = Math.round(360 / os);
         return { q: `<b>Bereken de Omzetduur in dagen:</b><br><br>De omzetsnelheid is ${os}.<br>(Gebruik 360 dagen)`, c: ans, exp: `Uitleg: 360 / ${os} = ${ans} dagen` };
     };
 
-    const typeSG = () => {
-        const tot = Math.floor(Math.random() * 1100) + 400;
-        const lev = Math.floor(tot * (Math.random() * 0.15 + 0.82));
-        const res = (lev / tot) * 100;
-        const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `<b>Bereken de Servicegraad in %:</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>Direct leverbaar: ${lev}<br>Totaal assortiment: ${tot}`, c: ans, exp: `Uitleg: (${lev} / ${tot}) x 100% = ${ans}%` };
-    };
-
+    // 7. Gemiddelde voorraad (2 punten)
     const typeGV2 = () => {
         const b = Math.floor(Math.random() * 1000) + 500, e = Math.floor(Math.random() * 1000) + 500;
         const ans = (b + e) / 2;
         return { q: `<b>Bereken de Gemiddelde Voorraad (2 punten):</b><br><br>Beginvoorraad: ${b}<br>Eindvoorraad: ${e}`, c: ans, exp: `Uitleg: (${b} + ${e}) / 2 = ${ans}` };
     };
 
+    // 8. Gemiddelde voorraad (X maanden)
     const typeGV3 = () => {
         const mnd = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
         const amt = Math.floor(Math.random() * 3) + 3;
@@ -165,41 +220,10 @@ function generateQuestions() {
         };
     };
 
-    const typeNO = () => {
-        // Kies willekeurig tussen 9% BTW (supermarkt food) of 21% BTW (non-food)
-        const btwPercentage = Math.random() < 0.5 ? 9 : 21;
-        
-        // Genereer een mooie netto omzet als basis (tussen €1000 en €9000, rond getal)
-        const netto = Math.floor(Math.random() * 81 + 10) * 100;
-        
-        // Bereken de BTW en de consumentenomzet (netto * 1.09 of 1.21)
-        const btwBedrag = netto * (btwPercentage / 100);
-        const consumentenomzet = netto + btwBedrag;
-
-        // Kies willekeurig of ze de Netto-omzet of het BTW-bedrag moeten berekenen
-        const variant = Math.random() < 0.5;
-        
-        if (variant) {
-            return {
-                q: `<b>Bereken de Netto-omzet:</b><br><br>De consumentenomzet (inclusief BTW) van de afdeling bedraagt <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br>Het BTW-tarief op deze productgroep is <b>${btwPercentage}%</b>.`,
-                c: netto,
-                exp: `Uitleg: Netto-omzet = Consumentenomzet / (1 + (BTW-percentage / 100))<br>€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}`
-            };
-        } else {
-            return {
-                q: `<b>Bereken het BTW-bedrag in euro's:</b><br><br>De consumentenomzet (inclusief BTW) bedraagt <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br>Op deze producten zit <b>${btwPercentage}%</b> BTW.`,
-                c: btwBedrag.toFixed(2), // Rond af op 2 decimalen voor geld
-                exp: `Uitleg: Bereken eerst de netto-omzet (€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}).<br>Het BTW-bedrag is het verschil: €${consumentenomzet.toFixed(2).replace('.', ',')} - €${netto} = €${btwBedrag.toFixed(2).replace('.', ',')}`
-            };
-        }
-    };
-
-    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').replace('€', '').trim();
-
-    // Pool met de formules (inclusief de nieuwe netto-omzet variant)
+    // De complete evenwichtige mix van 10 vragen
     let pool = [
         typeBP(), typeBP(), 
-        typeNO(), typeNO(), // Onze nieuwe formule!
+        typeNO(), typeNO(), 
         typeOS(), 
         typeOD(), 
         typeSG(), 
@@ -208,6 +232,7 @@ function generateQuestions() {
         typeGV3()
     ];
     questions = pool.sort(() => 0.5 - Math.random());
+}
 
 function show() {
     const q = questions[cur];
@@ -222,7 +247,8 @@ function show() {
 }
 
 function checkAnswer() {
-    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').trim();
+    // Stripped nu automatisch ook eurotekens en corrigeert komma's naar punten
+    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').replace('€', '').trim();
     if (val === "") return;
     const q = questions[cur];
     document.getElementById("user-input").disabled = true;
@@ -237,7 +263,7 @@ function checkAnswer() {
         fb.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
     } else {
         fb.className = "feedback-wrong";
-        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>${q.c}</b>.<br><br>${q.exp}`;
+        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>€${q.c.toString().replace('.', ',')}</b>.<br><br>${q.exp}`;
     }
 }
 
@@ -252,13 +278,10 @@ function end() {
     document.getElementById("result-area").style.display = "block";
     document.getElementById("final-score").innerText = `${score} / 10`;
     
-    // Cijfer berekenen
     let grade = (score / 10) * 10;
     document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
-    
     document.getElementById("congrats-text").innerText = score >= 6 ? "Gefeliciteerd! Je hebt een voldoende en bent klaar voor het examen." : "Nog even oefenen met de formules, je komt er wel!";
     
-    // Confetti feestje vanaf een voldoende (cijfer 6 of hoger)
     if (score >= 6) {
         triggerFeest();
     }
