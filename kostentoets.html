@@ -148,85 +148,715 @@
 <script>
 // Volledige database met alle 70 begrippen uit de studiefoto's
 const fullPool = [
-    // --- FOTO 1 (Aflossen t/m Brutoloon) ---
-    {q: "Wat wordt er bedoeld met het begrip 'Aflossen'?", a: ["Terugbetalen van de schuld", "Het betalen van de rente over een lening", "Het afschrijven van een duurzaam bedrijfsmiddel"], c: 0},
-    {q: "Wat is 'Afschrijving'?", a: ["Bedrag dat het bedrijf jaarlijks reserveert om het hulp- of transportmiddel door een nieuw te kunnen vervangen", "De totale aanschafprijs van een machine in één keer", "De winst die overblijft na aftrek van inkomstenbelasting"], c: 0},
-    {q: "Wat zijn 'Afschrijvingskosten'?", a: ["Bedrag waarmee een transport- of hulpmiddel jaarlijks in waarde vermindert, gebaseerd op aankoopprijs min restwaarde", "De rente die betaald wordt over de lening voor het transportmiddel", "De onderhoudskosten en reparaties van een machine"], c: 0},
-    {q: "Wat is de 'Boekwaarde'?", a: ["Aanschafprijs minus afschrijving", "De werkelijke marktwaarde op de tweedehandsmarkt", "De vervangingswaarde gecorrigeerd voor inflatie"], c: 0},
-    {q: "Wat is 'Brutoloon'?", a: ["Loon waarover nog belasting en premies betaald moeten worden", "Het nettoloon vermeerderd met secundaire arbeidsvoorwaarden", "Het minimumloon inclusief vakantiegeld"], c: 0},
+    // --- FOTO 1: Afschrijvingen, Lonen & Pand ---
+    {
+        q: "Wat wordt er bedoeld met het begrip 'Aflossen'?", 
+        a: [
+            "Terugbetalen van de schuld", 
+            "Het periodiek betalen van de rentevergoeding over een lening", 
+            "Het jaarlijks waardeverlies van een duurzaam bedrijfsmiddel verwerken", 
+            "Het overdragen van een kortlopende schuld aan een leverancier"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Afschrijving'?", 
+        a: [
+            "Bedrag dat het bedrijf jaarlijks reserveert om het hulp- of transportmiddel door een nieuw te kunnen vervangen", 
+            "Het bedrag waarmee de boekwaarde van een bedrijfsmiddel onder nul daalt", 
+            "De totale contante uitgaande geldstroom bij de aanschaf van inventaris", 
+            "De fiscale winstuitkering aan de eigenaren van de onderneming"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Afschrijvingskosten'?", 
+        a: [
+            "Bedrag waarmee een transport- of hulpmiddel jaarlijks in waarde vermindert, gebaseerd op aankoopprijs min restwaarde", 
+            "De bijkomende onderhoudskosten om een machine operationeel te houden", 
+            "De jaarlijkse rentebetalingen op de lening van een transportmiddel", 
+            "Het verschil tussen de marktwaarde en de aanschafprijs van een bedrijfspand"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Boekwaarde' van een bedrijfsmiddel?", 
+        a: [
+            "Aanschafprijs minus afschrijving", 
+            "De geschatte restwaarde aan het einde van de economische levensduur", 
+            "De actuele marktwaarde bij verkoop aan derden", 
+            "De oorspronkelijke aanschafprijs vermeerderd met de onderhoudskosten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Brutoloon'?", 
+        a: [
+            "Loon waarover nog belasting en premies betaald moeten worden", 
+            "Het loon dat de werknemer daadwerkelijk op zijn bankrekening ontvangt", 
+            "De totale loonkosten voor de werkgever inclusief werkgeverslasten", 
+            "Het wettelijk vastgestelde minimumloon vermeerderd met bonussen"
+        ], 
+        c: 0
+    },
 
-    // --- FOTO 2 (Bedrijfsresultaat t/m Ontvangsten) ---
-    {q: "Wat is het 'Bedrijfsresultaat'?", a: ["Exploitatiekosten min het brutoresultaat", "De totale omzet min de inkoopwaarde", "Het eigen vermogen vermeerderd met de winst"], c: 0},
-    {q: "Wat is het 'Economisch resultaat'?", a: ["Beloning voor het risico dat een ondernemer loopt voor het hebben van een bedrijf", "De wettelijke rente over banktegoeden", "Het brutoloon van de directeur"], c: 0},
-    {q: "Wat is 'Eigen vermogen'?", a: ["Vermogen dat wordt gevormd door de middelen die door een ondernemer zelf in zijn bedrijf zijn ingebracht", "Alle schulden bij leveranciers en banken", "Het vreemd vermogen op de balans"], c: 0},
-    {q: "Wat is een 'Fee'?", a: ["Afgesproken vergoeding voor het leveren van een bepaalde dienst", "Een vaste rentevergoeding op een lening", "Een boete wegens te late betaling"], c: 0},
-    {q: "Wat zijn 'Fiscale kosten'?", a: ["Kosten die echt nodig zijn om als onderneming te kunnen draaien en de kosten die rechtstreeks met de onderneming te maken hebben", "Niet-fiscale kosten die privé worden gemaakt", "Incidentele lasten"], c: 0},
-    {q: "Wat is 'Fiscale winst'?", a: ["Winst waarover een onderneming belasting moet betalen", "De nettowinst na aftrek van alle privé-onkosten", "Het bedrijfsresultaat voor aftrek van rente"], c: 0},
-    {q: "Wat is een 'Gebroken boekjaar'?", a: ["Administratie hebben over een periode anders dan een kalenderjaar", "Een boekjaar dat abrupt wordt afgebroken door een faillissement", "Een kalenderjaar van 1 januari tot 31 december"], c: 0},
-    {q: "Wat is 'Gewaardeerd loon'?", a: ["Bedrag dat de ondernemer in een vergelijkbare functie zou verdienen in een andere organisatie", "Het daadwerkelijke nettoloon dat de ondernemer zichzelf uitkeert", "Het minimumloon voor medewerkers"], c: 0},
-    {q: "Wat is 'Gewaardeerd rendement eigen vermogen'?", a: ["Winst van het geïnvesteerd eigen vermogen", "De rente op een zakelijke bankrekening", "Het dividend van externe aandeelhouders"], c: 0},
-    {q: "Wat is 'Gewaardeerde interest'?", a: ["Rente die de ondernemer zou ontvangen als hij zijn eigen vermogen niet in de onderneming had geïnvesteerd, maar bij een bank had weggezet", "De rente betaald over het vreemd vermogen", "Het gewaardeerd loon van de ondernemer"], c: 0},
-    {q: "Wat zijn 'Incidentele baten'?", a: ["Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verhogen", "De reguliere netto-omzet uit de winkelverkoop", "Structurele subsidies van de overheid"], c: 0},
-    {q: "Wat zijn 'Incidentele lasten'?", a: ["Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verlagen", "Reguliere bedrijfskosten zoals huur en loon", "Reguliere inkoopkosten van handelswaren"], c: 0},
-    {q: "Wat is 'Inkomstenbelasting'?", a: ["Belasting over het totale inkomen van iedere natuurlijke persoon in Nederland of met binnenlands inkomen", "Vennootschapsbelasting voor BV's", "Omzetbelasting over de verkoop"], c: 0},
-    {q: "Wat zijn 'Kosten'?", a: ["Kosten die worden gemaakt voor de bedrijfsvoering", "Uitgaven die direct worden omgezet in liquide middelen", "Alle inkomsten uit de verkoop van producten"], c: 0},
-    {q: "Wat is 'Netto-omzet'?", a: ["Omzet exclusief btw", "Omzet inclusief btw en accijnzen", "De brutowinst van de onderneming"], c: 0},
-    {q: "Wat is 'Nettoverlies'?", a: ["Negatief bedrijfsresultaat", "Positief bedrijfsresultaat", "Het totale vreemd vermogen"], c: 0},
-    {q: "Wat is 'Nettowinst'?", a: ["Positief bedrijfsresultaat", "Negatief bedrijfsresultaat", "De totale omzet minus inkoopwaarde"], c: 0},
-    {q: "Wat zijn 'Niet-fiscale kosten'?", a: ["Kosten die niet voor de onderneming zijn gemaakt", "Fiscale kosten die direct zakelijk aftrekbaar zijn", "Afschrijvingskosten van bedrijfsmiddelen"], c: 0},
-    {q: "Wat zijn 'Ontvangsten'?", a: ["Geld dat echt binnenkomt als liquide middel", "Alle gerealiseerde omzet op rekening", "De totale winst in een boekjaar"], c: 0},
+    // --- FOTO 2: Financiële Resultaten, Winst & Belastingen ---
+    {
+        q: "Wat is het 'Bedrijfsresultaat'?", 
+        a: [
+            "Exploitatiekosten min het brutoresultaat", 
+            "De totale omzet verminderd met alleen de inkoopwaarde van de omzet", 
+            "Het netto overschot na aftrek van de inkomstenbelasting van de ondernemer", 
+            "Het totaal aan liquide middelen dat aan het einde van het boekjaar op de bank staat"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is het 'Economisch resultaat'?", 
+        a: [
+            "Beloning voor het risico dat een ondernemer loopt voor het hebben van een bedrijf", 
+            "Het verschil tussen de contante uitgaven en de ontvangen omzet op jaarbasis", 
+            "De nettowinst na verplichte afdracht van de vennootschapsbelasting", 
+            "Het resultaat dat uitsluitend voortkomt uit incidentele baten en lasten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Eigen vermogen'?", 
+        a: [
+            "Vermogen dat wordt gevormd door de middelen die door een ondernemer zelf in zijn bedrijf zijn ingebracht", 
+            "Het totaal van alle nog openstaande klantvorderingen en contant geld", 
+            "Het kapitaal dat door banken en leveranciers aan het bedrijf is uitgeleend", 
+            "De totale marktwaarde van het bedrijfspand minus de hypotheekschuld"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is een 'Fee'?", 
+        a: [
+            "Afgesproken vergoeding voor het leveren van een bepaalde dienst", 
+            "Een boetebedrag voor het te laat aflossen van een leverancierskrediet", 
+            "Het vaste rentepercentage dat betaald wordt over het vreemd vermogen", 
+            "De verplichte afdracht van omzetbelasting aan de belastingdienst"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Fiscale kosten'?", 
+        a: [
+            "Kosten die echt nodig zijn om als onderneming te kunnen draaien en de kosten die rechtstreeks met de onderneming te maken hebben", 
+            "Kosten die uitsluitend privé worden gemaakt en niet zakelijk aftrekbaar zijn", 
+            "De rentevergoedingen die verschuldigd zijn aan de Belastingdienst", 
+            "Incidentele verliezen die ontstaan door het afboeken van verouderde voorraad"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Fiscale winst'?", 
+        a: [
+            "Winst waarover een onderneming belasting moet betalen", 
+            "De nettowinst gecorrigeerd voor alle niet-zakelijke privé-uitgaven", 
+            "Het bedrijfsresultaat vóór aftrek van afschrijvingskosten", 
+            "De brutowinst verminderd met uitsluitend de personeelskosten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is een 'Gebroken boekjaar'?", 
+        a: [
+            "Administratie hebben over een periode anders dan een kalenderjaar", 
+            "Een boekjaar waarin een tussentijds faillissement of overname plaatsvindt", 
+            "Een administratieve periode van exact zes maanden voor seizoensbedrijven", 
+            "Een boekjaar waarin de balans niet in evenwicht kan worden gebracht"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Gewaardeerd loon'?", 
+        a: [
+            "Bedrag dat de ondernemer in een vergelijkbare functie zou verdienen in een andere organisatie", 
+            "Het effectief door de eigenaar opgenomen privé-salaris uit de onderneming", 
+            "Het loon inclusief alle secundaire arbeidsvoorwaarden en prestatiebonussen", 
+            "Het wettelijk minimumloon gecorrigeerd voor de huidige inflatie"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Gewaardeerd rendement eigen vermogen'?", 
+        a: [
+            "Winst van het geïnvesteerd eigen vermogen", 
+            "Het vaste rentepercentage dat op een zakelijke spaarrekening wordt ontvangen", 
+            "De dividenduitkering die aan externe aandeelhouders wordt gegarandeerd", 
+            "De verhouding tussen het vreemd vermogen en het totale vermogen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Gewaardeerde interest'?", 
+        a: [
+            "Rente die de ondernemer zou ontvangen als hij zijn eigen vermogen niet in de onderneming had geïnvesteerd, maar bij een bank had weggezet", 
+            "De werkelijk betaalde rente over het bancair verkregen vreemd vermogen", 
+            "Het renteverschil tussen een hypothecaire lening en een consumptief krediet", 
+            "De wettelijke boeterente bij het overschrijden van de betalingstermijn"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Incidentele baten'?", 
+        a: [
+            "Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verhogen", 
+            "De extra verkoopopbrengsten tijdens de drukke feestdagenperiode", 
+            "De verwachte jaarlijkse stijging van de reguliere netto-omzet", 
+            "Subsidies die structureel elk jaar door de overheid worden toegekend"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Incidentele lasten'?", 
+        a: [
+            "Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verlagen", 
+            "De maandelijks terugkerende vaste lasten zoals huur en energie", 
+            "Verliezen die ontstaan door de reguliere jaarlijkse voorraadderving", 
+            "De kosten die gemaakt worden voor het onderhoud van duurzame bedrijfsmiddelen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Inkomstenbelasting'?", 
+        a: [
+            "Belasting over het totale inkomen van iedere natuurlijke persoon in Nederland of met binnenlands inkomen", 
+            "De heffing over de winst van rechtspersonen zoals een Besloten Vennootschap (BV)", 
+            "De omzetbelasting die door de winkelier wordt ingehouden op consumentenverkopen", 
+            "Een gemeentelijke belasting op het bezit van zakelijk onroerend goed"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Kosten'?", 
+        a: [
+            "Kosten die worden gemaakt voor de bedrijfsvoering", 
+            "Alle uitgaande geldstromen die in een periode van de bankrekening verdwijnen", 
+            "De totale uitgaven voor de aanschaf van voorraden en vlottende activa", 
+            "Het bedrag dat nodig is om alle schulden aan leveranciers af te lossen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Netto-omzet'?", 
+        a: [
+            "Omzet exclusief btw", 
+            "De totale kassa-ontvangsten inclusief btw en accijnzen", 
+            "De brutowinst verminderd met de operationele bedrijfskosten", 
+            "De totale omzet minus de personeelskosten van de filialen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Nettoverlies'?", 
+        a: [
+            "Negatief bedrijfsresultaat", 
+            "Het verlies dat ontstaat doordat de inkoopwaarde hoger is dan de kostprijs", 
+            "Het tekort aan liquide middelen op de zakelijke bankrekening", 
+            "De derving die ontstaat door diefstal van eigen personeel"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Nettowinst'?", 
+        a: [
+            "Positief bedrijfsresultaat", 
+            "De netto-omzet verminderd met alleen de inkoopwaarde van de goederen", 
+            "Het verschil tussen de totale opbrengsten en de variabele kosten", 
+            "Het totale bedrag dat beschikbaar is voor investeringen in machines"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Niet-fiscale kosten'?", 
+        a: [
+            "Kosten die niet voor de onderneming zijn gemaakt", 
+            "Zakelijke kosten die volgens de belastingwetgeving niet aftrekbaar zijn van de winst", 
+            "Kosten die direct doorberekend worden in de consumentenverkoopprijs", 
+            "Afschrijvingskosten die uitsluitend administratief worden verwerkt"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Ontvangsten'?", 
+        a: [
+            "Geld dat echt binnenkomt als liquide middel", 
+            "De gefactureerde omzet van verkopen die nog op rekening staan", 
+            "Het totale bedrag aan gemaakte brutowinst in een boekjaar", 
+            "De subsidiebedragen die door de overheid zijn toegezegd maar nog niet betaald"
+        ], 
+        c: 0
+    },
 
-    // --- FOTO 3 (Complementaire kosten t/m Voorraadkosten) ---
-    {q: "Wat zijn 'Complementaire kosten'?", a: ["Bijkomende kosten die nodig zijn om een duurzaam bedrijfsmiddel te laten functioneren", "De vaste huisvestingskosten van het hoofdkantoor", "De directe inkoopprijs van handelswaren"], c: 0},
-    {q: "Wat zijn 'Duurzame bedrijfsmiddelen (DBM)'?", a: ["Middelen die een bedrijf voor langere tijd kan gebruiken", "Vlottende activa zoals voorraden en debiteuren", "Kortlopende schulden aan leveranciers"], c: 0},
-    {q: "Wat is de 'Economische levensduur'?", a: ["Periode waarin het economisch verantwoord is een bedrijfsmiddel te gebruiken", "De tijd dat een machine technisch kan blijven draaien tot hij stuk is", "De vaste afschrijvingsperiode vastgesteld door de Belastingdienst"], c: 0},
-    {q: "Wat zijn 'Huisvestingskosten'?", a: ["Kosten die direct verband houden met het gebruik van een bedrijfspand", "Kosten voor de inkoop van handelswaren", "Loonkosten van het winkelpersoneel"], c: 0},
-    {q: "Wat is 'Interest'?", a: ["Periodieke vergoeding voor het lenen van geld", "Een belastingheffing over bedrijfsassets", "De winstdeling voor aandeelhouders"], c: 0},
-    {q: "Wat zijn 'Kostprijsverhogende belastingen'?", a: ["Belastingen voor bedrijven die doorberekend worden in de kostprijs van de producten", "Inkomstenbelasting over de winst van de ondernemer", "Loonheffing over het personeel"], c: 0},
-    {q: "Wat is de 'Levensduur'?", a: ["Periode tussen het tijdstip van aanschaf en het moment waarop het wordt vervangen of niet meer wordt gebruikt", "De periode waarin een bedrijf winstgevend is", "De economische afschrijvingstermijn"], c: 0},
-    {q: "Wat is 'Leverancierskrediet'?", a: ["Kredietvorm waarbij de leverancier van goederen het bedrijf extra tijd geeft om de geleverde goederen te betalen", "Een banklening voor de financiering van een pand", "Krediet dat klanten krijgen bij het kopen op afbetaling"], c: 0},
-    {q: "Wat is 'Lineair afschrijven'?", a: ["Manier van afschrijven waarbij het bedrag per periode gelijk is", "Afschrijven op basis van het aantal geproduceerde eenheden", "Afschrijven waarbij het bedrag elk jaar progressief lager wordt"], c: 0},
-    {q: "Wat is 'Loonheffing'?", a: ["Verzamelnaam voor loonbelasting en premies volksverzekeringen die de werknemer betaalt", "De premies die de werkgever betaalt voor de bedrijfsverzekering", "De inkomstenbelasting van de directeur-grootaandeelhouder"], c: 0},
-    {q: "Wat zijn 'Loonkosten'?", a: ["Kosten die te maken hebben met de beloning van werknemers voor hun arbeid", "De dividenduitkering aan aandeelhouders", "De huurkosten van het bedrijfspand"], c: 0},
-    {q: "Wat is het 'Minimumloon'?", a: ["Minimaal loon dat volgens de wet aan werknemers mag worden betaald", "Het gemiddelde salaris binnen een retailbranche", "Het nettoloon na aftrek van alle premies"], c: 0},
-    {q: "Wat is 'Nettoloon'?", a: ["Brutoloon min belastingen en premies voor verzekeringen", "Het loon inclusief vakantiegeld en bonussen", "De totale loonkosten inclusief werkgeverslasten"], c: 0},
-    {q: "Wat zijn 'Niet-kostprijsverhogende belastingen'?", a: ["Belastingen die niet in de kostprijs van producten worden opgenomen, zoals btw en accijnzen", "Invoerrechten en milieuheffingen op grondstoffen", "Kostprijsverhogende belastingen"], c: 0},
-    {q: "Wat zijn 'Personeelskosten'?", a: ["Kosten die direct verbonden zijn aan het in dienst hebben van personeel", "Kosten voor de inkoop van inventaris", "Reclame- en marketingkosten"], c: 0},
-    {q: "Wat is de 'Technische levensduur'?", a: ["Periode waarin een bedrijfsmiddel technisch gezien in staat is prestaties te leveren", "De periode waarin het gebruik economisch rendabel is", "De wettelijke afschrijvingstermijn"], c: 0},
-    {q: "Wat zijn 'Uitgaven'?", a: ["Geld dat echt door het bedrijf betaald wordt", "Alle gemaakte kosten in een periode", "De totale opbrengsten van de omzet"], c: 0},
-    {q: "Wat zijn 'Verspillingen'?", a: ["Niet noodzakelijke kosten", "Noodzakelijke investeringen in duurzame bedrijfsmiddelen", "Proportioneel variabele kosten"], c: 0},
-    {q: "Wat zijn 'Voorraadkosten'?", a: ["Kosten die het gevolg zijn van het houden van voorraden", "Transportkosten van de leverancier naar het DC", "Productiekosten van de fabrikant"], c: 0},
+    // --- FOTO 3: Levensduur, Bedrijfsmiddelen & Krediet ---
+    {
+        q: "Wat zijn 'Complementaire kosten'?", 
+        a: [
+            "Bijkomende kosten die nodig zijn om een duurzaam bedrijfsmiddel te laten functioneren", 
+            "Kosten die direct gekoppeld zijn aan het vergroten van de omzet", 
+            "De rente- en afschrijvingskosten van een nieuw bedrijfspand", 
+            "Kosten die ontstaan door het uitbesteden van administratie aan derden"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Duurzame bedrijfsmiddelen (DBM)'?", 
+        a: [
+            "Middelen die een bedrijf voor langere tijd kan gebruiken", 
+            "Voorraden handelswaren die bestemd zijn voor directe verkoop", 
+            "Grondstoffen en hulpstoffen die tijdens het productieproces verbruikt worden", 
+            "Liquide middelen zoals de kasvoorraad en het tegoed op de bankrekening"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Economische levensduur'?", 
+        a: [
+            "Periode waarin het economisch verantwoord is een bedrijfsmiddel te gebruiken", 
+            "De maximale tijd dat een machine fysiek kan draaien voordat hij definitief kapotgaat", 
+            "De vastgestelde termijn van 5 jaar waarin de Belastingdienst eist af te schrijven", 
+            "De periode waarin de onderhoudskosten exact nul euro bedragen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Huisvestingskosten'?", 
+        a: [
+            "Kosten die direct verband houden met het gebruik van een bedrijfspand", 
+            "De afschrijvingskosten op de magazijninventaris en stellingen", 
+            "De jaarlijkse belastingheffing op de winst uit vastgoed", 
+            "De inrichtingskosten voor het openen van een nieuw filiaal"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Interest'?", 
+        a: [
+            "Periodieke vergoeding voor het lenen van geld", 
+            "De winstmarge die behaald wordt op de inkoopwaarde van de omzet", 
+            "Het percentage dat de bank in rekening brengt bij betalingsverkeer", 
+            "De fiscale heffing op het vermogen van een rechtspersoon"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Kostprijsverhogende belastingen'?", 
+        a: [
+            "Belastingen voor bedrijven die doorberekend worden in de kostprijs van de producten", 
+            "Directe belastingen zoals de inkomstenbelasting van de eigenaar", 
+            "Omzetbelasting (BTW) die door de consument aan de kassa wordt afgerekend", 
+            "Fiscale boetes wegens het te laat indienen van de aangifte"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat wordt verstaan onder 'Levensduur'?", 
+        a: [
+            "Periode tussen het tijdstip van aanschaf en het moment waarop het wordt vervangen of niet meer wordt gebruikt", 
+            "De gemiddelde periode waarin een winkelpand rendabel gehuurd kan worden", 
+            "De wettelijke garantietermijn die een leverancier verleent op apparatuur", 
+            "De tijd die nodig is om een investering via de nettowinst volledig terug te verdienen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Leverancierskrediet'?", 
+        a: [
+            "Kredietvorm waarbij de leverancier van goederen het bedrijf extra tijd geeft om de geleverde goederen te betalen", 
+            "Een kortlopende lening bij de bank voor het inkopen van kerstvoorraden", 
+            "Het recht van klanten om op afbetaling goederen mee te nemen uit de winkel", 
+            "Korting die een leverancier verleent bij directe contante betaling"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Lineair afschrijven'?", 
+        a: [
+            "Manier van afschrijven waarbij het bedrag per periode gelijk is", 
+            "Afschrijven op basis van een vast percentage van de wisselende boekwaarde", 
+            "Afschrijven waarbij de kosten meestijgen met de hoogte van de omzet", 
+            "Een afschrijvingsmethode waarbij de eerste jaren extra veel wordt afgeboekt"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Loonheffing'?", 
+        a: [
+            "Verzamelnaam voor loonbelasting en premies volksverzekeringen die de werknemer betaalt", 
+            "De bijkomende werkgeversheffingen voor de WW en wia-verzekeringen", 
+            "Het totale bruto-salaris dat aan het personeel wordt overgemaakt", 
+            "De belasting over de winst die uitgekeerd wordt als bonussen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Loonkosten'?", 
+        a: [
+            "Kosten die te maken hebben met de beloning van werknemers voor hun arbeid", 
+            "Alleen het bedrag dat netto op de bankrekening van de medewerkers staat", 
+            "De kosten voor het inhuren van externe organisatieadviseurs", 
+            "De vergoedingen die aan leden van de raad van bestuur worden uitgekeerd"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is het 'Minimumloon'?", 
+        a: [
+            "Minimaal loon dat volgens de wet aan werknemers mag worden betaald", 
+            "Het basissalaris volgens de geldende retail-CAO vóór de toeslagen", 
+            "Het gemiddelde aanvangsalaris van een beginnend vakvak-medewerker", 
+            "Het nettoloon na verplichte inhouding van de bedrijfspensioenpremie"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Nettoloon'?", 
+        a: [
+            "Brutoloon min belastingen en premies voor verzekeringen", 
+            "Het brutoloon verminderd met uitsluitend de pensioenafdracht", 
+            "De totale personeelskosten gedeeld door het aantal gewerkte uren", 
+            "Het afgesproken jaarsalaris inclusief de 8% vakantietoeslag"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Niet-kostprijsverhogende belastingen'?", 
+        a: [
+            "Belastingen die niet in de kostprijs van producten worden opgenomen, zoals btw en accijnzen", 
+            "Gemeentelijke riool- en afvalstoffenheffingen voor bedrijfspanden", 
+            "Invoerrechten die betaald worden bij de import van goederen buiten de EU", 
+            "Belastingen die direct verrekend worden met de brutowinstmarge"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Personeelskosten'?", 
+        a: [
+            "Kosten die direct verbonden zijn aan het in dienst hebben van personeel", 
+            "Alleen de declaraties voor reiskosten en werkkleding van de medewerkers", 
+            "De vergoedingen die aan uitzendbureaus worden betaald voor flexkrachten", 
+            "De kosten voor het opleiden en werven van nieuwe filialmanagers"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Technische levensduur'?", 
+        a: [
+            "Periode waarin een bedrijfsmiddel technisch gezien in staat is prestaties te leveren", 
+            "De periode waarin een machine economisch gezien de hoogste winst oplevert", 
+            "De termijn die de fabrikant stelt voordat de eerste grote beurt nodig is", 
+            "De maximale duur van het leasecontract van een transportmiddel"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Uitgaven'?", 
+        a: [
+            "Geld dat echt door het bedrijf betaald wordt", 
+            "Kosten die in de winst-en-verliesrekening worden toegerekend aan de omzet", 
+            "Het waardeverlies van duurzame bedrijfsmiddelen in een boekjaar", 
+            "De openstaande facturen die nog aan leveranciers betaald moeten worden"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Verspillingen'?", 
+        a: [
+            "Niet noodzakelijke kosten", 
+            "Kosten die ontstaan door het toepassen van progressief variabele tarieven", 
+            "De gewone commerciële kortingen die aan vaste klanten worden gegeven", 
+            "Afschrijvingskosten van bedrijfsmiddelen die al zijn afgeschreven"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Voorraadkosten'?", 
+        a: [
+            "Kosten die het gevolg zijn van het houden van voorraden", 
+            "De directe inkoopprijs die op de factuur van de leverancier staat", 
+            "De vrachtkosten van het distributiecentrum naar de individuele filialen", 
+            "Het omzetverlies dat ontstaat bij lege schappen (out-of-stock)"
+        ], 
+        c: 0
+    },
 
-    // --- FOTO 4 (Bezettingsgraad t/m Kostprijs) ---
-    {q: "Wat is de 'Bezettingsgraad'?", a: ["Mate waarin een bedrijf gebruikmaakt van de beschikbare capaciteit", "De verhouding tussen vaste en variabele kosten", "Het percentage winst op de netto-omzet"], c: 0},
-    {q: "Wat is het 'Bezettingsresultaat'?", a: ["Verschil tussen de totale constante kosten in een periode en de in de prijs van de verkochte producten opgenomen constante kosten", "Het resultaat uit de inkoop en verkoop van goederen", "De totale winst minus de belasting"], c: 0},
-    {q: "Wat is een 'Bezettingsverlies'?", a: ["Verlies dat ontstaat doordat er minder constante kosten zijn verrekend dan begroot", "Verlies door winkeldiefstal en derving", "Winst door een hoge omzetsnelheid"], c: 0},
-    {q: "Wat is 'Bezettingswinst'?", a: ["Winst die ontstaat doordat er meer constante kosten zijn verrekend dan begroot", "Winst door een verlaagd BTW-tarief", "Winst door inkoopkortingen"], c: 0},
-    {q: "Wat is de 'Break-evenafzet'?", a: ["Aantal artikelen dat een bedrijf moet verkopen om de kosten terug te verdienen", "Het aantal artikelen dat nodig is voor de maximale productiecapaciteit", "De omzet waarbij de winst maximaal is"], c: 0},
-    {q: "Wat is een 'Break-evenanalyse'?", a: ["Hulpmiddel om de relatie tussen vaste en variabele kosten en opbrengsten te bestuderen", "Een analyse van de personeelsbezetting in de winkel", "Een berekening van de economische voorraad"], c: 0},
-    {q: "Wat is de 'Break-evenomzet'?", a: ["Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", "De omzet die leidt tot het maximale bedrijfsresultaat", "De omzet exclusief alle variabele kosten"], c: 0},
-    {q: "Wat is het 'Break-evenpunt'?", a: ["Punt waarbij de totale opbrengsten gelijk zijn aan de totale kosten, en de winst dus nul is", "Het punt waarop de capaciteitsgrens wordt bereikt", "Het moment waarop de inkoopwaarde gelijk is aan de brutowinst"], c: 0},
-    {q: "Wat is de 'Capaciteitsgrens'?", a: ["Maximale omzet of productie die je met de inzet van alle beschikbare bedrijfsmiddelen en personeel kunt bereiken", "Het minimale bestelpunt van de voorraad", "De break-evenomzet van het bedrijf"], c: 0},
-    {q: "Wat zijn 'Capaciteitskosten'?", a: ["Kosten die niet afhankelijk zijn van de omzet", "Proportioneel variabele kosten van de inkoop", "Directe loonkosten per product"], c: 0},
-    {q: "Wat is de 'Commerciële kostprijs'?", a: ["Fabricagekostprijs en de verkoopkosten samen", "De inkoopprijs exclusief transportkosten", "De integrale kostprijs inclusief btw"], c: 0},
-    {q: "Wat zijn 'Constante kosten'?", a: ["Kosten die niet afhankelijk zijn van de omzet", "Kosten die stijgen bij elke verkochte eenheid", "Variabele inkoopkosten"], c: 0},
-    {q: "Wat is het 'Constante kostentarief'?", a: ["Deel van de omzet dat nodig is om de constante kosten terug te verdienen", "Het tarief van de vennootschapsbelasting", "De winstmarge per product"], c: 0},
-    {q: "Wat is de 'Contributiemarge'?", a: ["Bedrag dat per product bijdraagt aan de dekking van de constante kosten en de winst", "De totale belastingdruk over de winst", "De inkoopprijs van de goederen"], c: 0},
-    {q: "Wat zijn 'Degressief variabele kosten'?", a: ["Variabele kosten die minder dan gelijk stijgen bij een toename van de netto-omzet", "Variabele kosten die sneller stijgen dan de omzet", "Constante kosten die vast blijven"], c: 0},
-    {q: "Wat is de 'Dekkingsbijdrage'?", a: ["Verschil tussen de verkoopprijs en de variabele kosten per stuk", "Het verschil tussen de brutowinst en de nettowinst", "De som van constante en variabele kosten"], c: 0},
-    {q: "Wat is de 'Fabricagekostprijs'?", a: ["Alle kosten die nodig zijn om een product te maken", "De verkoopkosten en administratiekosten samen", "De consumentenomzet inclusief btw"], c: 0},
-    {q: "Wat is de 'Integrale kostprijs'?", a: ["Som van de constante en variabele kosten per product", "Alleen de variabele kosten per product", "Alleen de constante kosten per product"], c: 0},
-    {q: "Wat is de 'Integrale kostprijsmethode'?", a: ["Methode om de kostprijs van een product te berekenen waarbij constante en variabele kosten zijn inbegrepen", "Methode waarbij alleen variabele kosten worden toegerekend", "Methode voor het berekenen van de netto-omzet"], c: 0},
-    {q: "Wat is de 'Kostprijs'?", a: ["Som van de totale kosten per product", "De verkoopprijs inclusief winstopslag en btw", "De inkoopprijs van de leverancier"], c: 0},
+    // --- FOTO 4: Kostprijzen, Break-even & Bezetting ---
+    {
+        q: "Wat is de 'Bezettingsgraad'?", 
+        a: [
+            "Mate waarin een bedrijf gebruikmaakt van de beschikbare capaciteit", 
+            "Het percentage personeelsleden dat op een drukke zaterdag aanwezig is", 
+            "De verhouding tussen de constante kosten en de variabele kosten", 
+            "Het aandeel verkochte artikelen ten opzichte van de totale voorraad"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is het 'Bezettingsresultaat'?", 
+        a: [
+            "Verschil tussen de totale constante kosten in een periode en de in de prijs van de verkochte producten opgenomen constante kosten", 
+            "Het nettoverschil tussen de werkelijke omzet en de begrote omzet", 
+            "De brutowinst die behaald wordt bij een 100% benutting van het winkelpand", 
+            "Het resultaat dat overblijft na aftrek van de variabele personeelskosten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is een 'Bezettingsverlies'?", 
+        a: [
+            "Verlies dat ontstaat doordat er minder constante kosten zijn verrekend dan begroot", 
+            "Het financiële verlies dat veroorzaakt wordt door diefstal en beschadiging", 
+            "Het tekort op de begroting door een onverwachte stijging van de inkoopsprijzen", 
+            "Verlies dat optreedt wanneer de variabele kosten hoger zijn dan de verkoopprijs"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is 'Bezettingswinst'?", 
+        a: [
+            "Winst die ontstaat doordat er meer constante kosten zijn verrekend dan begroot", 
+            "De winst die gemaakt wordt door artikelen boven de adviesprijs te verkopen", 
+            "Het voordeel dat behaald wordt door grootschalige inkoopkortingen bij leveranciers", 
+            "De extra omzet die gegenereerd wordt tijdens de koopavonden"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Break-evenafzet'?", 
+        a: [
+            "Aantal artikelen dat een bedrijf moet verkopen om de kosten terug te verdienen", 
+            "De maximale verkoopcapaciteit van een filiaal in stuks per week", 
+            "Het aantal producten dat verkocht moet worden om de nettowinst te verdubbelen", 
+            "De minimale voorraad die aanwezig moet zijn om nee-verkoop te voorkomen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is een 'Break-evenanalyse'?", 
+        a: [
+            "Hulpmiddel om de relatie tussen vaste en variabele kosten en opbrengsten te bestuderen", 
+            "Een controle van het kassasysteem om kasverschillen op te sporen", 
+            "Een berekening van de optimale verhouding tussen eigen en vreemd vermogen", 
+            "Een analyse om de efficiëntie van de vulploeg in de winkel te meten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Break-evenomzet'?", 
+        a: [
+            "Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", 
+            "De maximale omzet die behaald kan worden bij een volledige bezettingsgraad", 
+            "De omzet minus de constante kosten en de afgedragen omzetbelasting", 
+            "De bruto-omzet waarbij de brutowinst exact gelijk is aan de inkoopwaarde"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is het 'Break-evenpunt'?", 
+        a: [
+            "Punt waarbij de totale opbrengsten gelijk zijn aan de totale kosten, en de winst dus nul is", 
+            "Het moment waarop een investering in een duurzaam bedrijfsmiddel is afgeschreven", 
+            "De verhouding waarin de constante kosten exact gelijk zijn aan de variabele kosten", 
+            "Het punt waarop een onderneming moet overstappen naar een ander btw-tarief"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Capaciteitsgrens'?", 
+        a: [
+            "Maximale omzet of productie die je met de inzet van alle beschikbare bedrijfsmiddelen en personeel kunt bereiken", 
+            "Het punt waarop de variabele kosten sneller beginnen te stijgen dan de omzet", 
+            "De wettelijke grens voor het maximaal aantal overuren van de medewerkers", 
+            "De minimale omzet die nodig is om de vaste huisvestingskosten te dekken"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Capaciteitskosten'?", 
+        a: [
+            "Kosten die niet afhankelijk zijn van de omzet", 
+            "Variabele kosten die direct meestijgen met het aantal verkochte producten", 
+            "Kosten die uitsluitend gemaakt worden tijdens de piekuren van de winkel", 
+            "De kosten voor het uitbreiden van het winkeloppervlak"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Commerciële kostprijs'?", 
+        a: [
+            "Fabricagekostprijs en de verkoopkosten samen", 
+            "De bruto consumentenprijs inclusief btw en winstmarge", 
+            "De inkoopprijs van de leverancier vermeerderd met de transportkosten", 
+            "De kostprijs uitsluitend gebaseerd op de variabele productiekosten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Constante kosten'?", 
+        a: [
+            "Kosten die niet afhankelijk zijn van de omzet", 
+            "Kosten die evenredig stijgen en dalen met het verkoopvolume", 
+            "Kosten die maandelijks variëren op basis van de inkoopprijzen", 
+            "Kosten die direct aan één specifiek product toegerekend kunnen worden"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is het 'Constante kostentarief'?", 
+        a: [
+            "Deel van de omzet dat nodig is om de constante kosten terug te verdienen", 
+            "Het vaste rentepercentage voor een langlopende hypotheek op het pand", 
+            "Het percentage waarmee de vaste kosten jaarlijks worden geïndexeerd", 
+            "De vastgestelde toeslag op de inkoopprijs om de dekking te garanderen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Contributiemarge'?", 
+        a: [
+            "Bedrag dat per product bijdraagt aan de dekking van de constante kosten en de winst", 
+            "De winstmarge die overblijft na aftrek van de totale integrale kostprijs", 
+            "Het vaste percentage dat een franchisenemer afdraagt aan de hoofdorganisatie", 
+            "De verhouding tussen de brutowinst en de netto-omzet"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Degressief variabele kosten'?", 
+        a: [
+            "Variabele kosten die minder dan gelijk stijgen bij een toename van de netto-omzet", 
+            "Variabele kosten die sneller stijgen dan de toename van de verkochte aantallen", 
+            "Kosten die afnemen in absolute euro's wanneer de omzet verdubbelt", 
+            "Vaste kosten die stapsgewijs stijgen bij het overschrijden van de capaciteitsgrens"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Dekkingsbijdrage'?", 
+        a: [
+            "Verschil tussen de verkoopprijs en de variabele kosten per stuk", 
+            "Het bedrag dat nodig is om het nettoverlies van het vorige jaar te compenseren", 
+            "De bijdrage van het hoofdkantoor in de marketingkosten van het filiaal", 
+            "Het verschil tussen de verwachte omzet en de werkelijk gerealiseerde omzet"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Fabricagekostprijs'?", 
+        a: [
+            "Alle kosten die nodig zijn om een product te maken", 
+            "De totale kostprijs inclusief de verkoop- en reclamekosten", 
+            "De prijs waarvoor de fabrikant het eindproduct aan de supermarkt verkoopt", 
+            "De inkoopwaarde verhoogd met uitsluitend de BTW"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Integrale kostprijs'?", 
+        a: [
+            "Som van de constante en variabele kosten per product", 
+            "De inkoopprijs inclusief de verwachte winstopslag van de detailhandelaar", 
+            "Uitsluitend de directe materiaalkosten verhoogd met de loonkosten", 
+            "De commerciële verkoopprijs verminderd met de omzetbelasting"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Integrale kostprijsmethode'?", 
+        a: [
+            "Methode om de kostprijs van een product te berekenen waarbij constante en variabele kosten zijn inbegrepen", 
+            "Systeem waarbij alleen de variabele kosten aan het product worden toegerekend", 
+            "Berekeningswijze gebaseerd op de gemiddelde inkoopprijzen in de branche", 
+            "Methode waarbij de vaste kosten uitsluitend ten laste van de nettowinst komen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Kostprijs'?", 
+        a: [
+            "Som van de totale kosten per product", 
+            "De adviesverkoopprijs die op het schap in de winkel staat", 
+            "Het bedrag van de laatste inkoopfactuur van de leverancier", 
+            "De netto-omzet gedeeld door het totale aantal verkochte artikelen"
+        ], 
+        c: 0
+    },
 
-    // --- FOTO 5 (Kritische omzet t/m Veiligheidsmarge) ---
-    {q: "Wat is de 'Kritische omzet'?", a: ["Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", "De maximale omzet binnen de capaciteitsgrens", "De omzet behaald door eigen personeel"], c: 0},
-    {q: "Wat is de 'Normatieve omzet'?", a: ["Normale omzet, omzet volgens norm", "De werkelijk gerealiseerde omzet op zaterdag", "De break-evenomzet"], c: 0},
-    {q: "Wat zijn 'Overheadkosten'?", a: ["Kosten die een bedrijf moet maken voor de bedrijfsvoering", "Directe materiaalkosten voor de productie", "Inkoopkosten van handelswaren"], c: 0},
-    {q: "Wat zijn 'Progressief variabele kosten'?", a: ["Variabele kosten die meer dan gelijk stijgen met de toename van de netto-omzet", "Variabele kosten die dalen bij een stijgende omzet", "Constante kosten die niet veranderen"], c: 0},
-    {q: "Wat zijn 'Proportioneel variabele kosten'?", a: ["Variabele kosten die gelijk met de omzet stijgen", "Kosten die volledig onafhankelijk zijn van de omzet", "Kosten die dalen bij een stijgende omzet"], c: 0},
-    {q: "Wat zijn 'Variabele kosten'?", a: ["Kosten die afhankelijk zijn van de netto-omzet", "Vaste huisvestingskosten en afschrijvingen", "Kosten die nooit veranderen ongeacht de omzet"], c: 0},
-    {q: "Wat is de 'Veiligheidsmarge'?", a: ["Percentage dat aangeeft hoeveel de werkelijk gerealiseerde netto-omzet of productie nog kan dalen voordat een onderneming verlies lijdt", "De extra voorraad in het magazijn voor levertijden", "De winstmarge per verkocht product"], c: 0}
+    // --- FOTO 5: Omzetnormen & Kostenvariatie ---
+    {
+        q: "Wat is de 'Kritische omzet'?", 
+        a: [
+            "Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", 
+            "De maximale omzet die behaald kan worden vlak voordat de apparatuur uitvalt", 
+            "De omzet die minimaal nodig is om het personeel hun bonus uit te keuren", 
+            "Het omzetniveau waarop de variabele kosten exact nul euro zijn"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Normatieve omzet'?", 
+        a: [
+            "Normale omzet, omzet volgens norm", 
+            "De maximaal haalbare omzet bij een 100% benutting van de capaciteitsgrens", 
+            "De omzet die behaald is in het beste boekjaar uit de geschiedenis van het bedrijf", 
+            "Het gemiddelde omzetcijfer van alle concurrenten in dezelfde regio"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Overheadkosten'?", 
+        a: [
+            "Kosten die een bedrijf moet maken voor de bedrijfsvoering", 
+            "Kosten die rechtstreeks per verkocht product op de kassabon staan", 
+            "Verliezen die ontstaan door het overschrijden van de budgetten", 
+            "Incidentele uitgaven voor het verbouwen van de winkel"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Progressief variabele kosten'?", 
+        a: [
+            "Variabele kosten die meer dan gelijk stijgen met de toename van de netto-omzet", 
+            "Variabele kosten die procentueel dalen als de productie toeneemt", 
+            "Vaste kosten die elk jaar automatisch stijgen door de indexatie", 
+            "Kosten die gelijk blijven ongeacht de stijging van het aantal verkopen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Proportioneel variabele kosten'?", 
+        a: [
+            "Variabele kosten die gelijk met de omzet stijgen", 
+            "Variabele kosten die minder dan evenredig meestijgen met de omzet", 
+            "Kosten die stapsgewijs toenemen bij het starten van een nieuwe ploegendienst", 
+            "Constante kosten die evenredig worden verdeeld over de producten"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat zijn 'Variabele kosten'?", 
+        a: [
+            "Kosten die afhankelijk zijn van de netto-omzet", 
+            "Vaste maandelijkse verplichtingen zoals de huur en de opstalverzekering", 
+            "Kosten die uitsluitend veranderen door besluiten van de directie", 
+            "De afschrijvingskosten van duurzame bedrijfsmiddelen"
+        ], 
+        c: 0
+    },
+    {
+        q: "Wat is de 'Veiligheidsmarge'?", 
+        a: [
+            "Percentage dat aangeeft hoeveel de werkelijk gerealiseerde netto-omzet of productie nog kan dalen voordat een onderneming verlies lijdt", 
+            "De extra financiële reserve op de bankrekening om onverwachte boetes op te vangen", 
+            "Het verschil tussen de maximale capaciteitsgrens en de normatieve omzet", 
+            "De winstmarge die wordt ingebouwd om schommelingen in de inkoopprijs op te vangen"
+        ], 
+        c: 0
+    }
 ];
 
 let selected = [];
