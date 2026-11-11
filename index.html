@@ -65,6 +65,9 @@
             padding: 25px;
             text-align: center;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
@@ -119,25 +122,13 @@
     </div>
     
     <div class="dashboard-content">
-        <!-- Kaart 1: Retaillogistiek Toets -->
+        <!-- Module 1: Kostentoets & Financiën -->
         <div class="card">
-            <h3>Theorie Toets</h3>
-            <p>Oefen met 30 willekeurige vragen uit de pool van 125+ begrippen over retaillogistiek, veiligheid en derving.</p>
-            <a href="toets.html" class="btn">Start Toets</a>
-        </div>
-
-        <!-- Kaart 2: Reken & Formules Casussen -->
-        <div class="card">
-            <h3>Rekenmodule & Casussen</h3>
-            <p>Train je rekenvaardigheid met dynamische casussen over bestelpunten, omzetsnelheid, servicegraad en BTW.</p>
-            <a href="formules.html" class="btn btn-blue">Start Rekenen</a>
-        </div>
-
-        <!-- Kaart 3: Kostentoets (NIEUW!) -->
-        <div class="card" style="grid-column: 1 / -1;">
-            <h3>Kostentoets & Financiën (Nieuw!)</h3>
-            <p>Train alle 70 begrippen over bedrijfskosten, afschrijvingen, resultaten, break-even en kostprijzen uit je nieuwe boek.</p>
-            <a href="kostentoets.html" class="btn" style="background: linear-gradient(135deg, var(--hoogvliet-green), #68961a);">Start Kostentoets</a>
+            <div>
+                <h3>Kostentoets & Financiën</h3>
+                <p>Train alle 70 begrippen over bedrijfskosten, afschrijvingen, resultaten, break-even en kostprijzen uit het nieuwste boek.</p>
+            </div>
+            <a href="kostentoets.html" class="btn">Start Kostentoets</a>
         </div>
     </div>
 </div>
