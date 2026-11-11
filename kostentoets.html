@@ -934,6 +934,23 @@ function end() {
     let grade = (score / 30) * 10;
     document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
 
+    // --- NIEUW: Resultaat opslaan in localStorage ---
+    const huidigResultaat = {
+        datum: new Date().toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        score: score,
+        cijfer: parseFloat(grade.toFixed(1))
+    };
+
+    // Haal bestaande resultaten op of maak een lege lijst
+    let resultaten = JSON.parse(localStorage.getItem('hoogvliet_toets_resultaten')) || [];
+    
+    // Voeg het nieuwe resultaat toe
+    resultaten.push(huidigResultaat);
+    
+    // Sla de bijgewerkte lijst op
+    localStorage.setItem('hoogvliet_toets_resultaten', JSON.stringify(resultaten));
+    // ------------------------------------------------
+
     if (score >= 17) {
         triggerFeest();
     }
