@@ -3,64 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekenen - Hoogvliet Academy</title>
+    <title>Kostentoets - Hoogvliet Academy</title>
+    <!-- Gecertificeerde Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { 
-            --bg-color: #0f172a; 
-            --card-bg: #1e293b; 
-            --hoogvliet-blue: #004c97; 
-            --hoogvliet-green: #86bc25; 
-            --text-main: #f8fafc; 
-            --text-dim: #94a3b8; 
-            --error: #ef4444; 
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --hoogvliet-blue: #004c97;
+            --hoogvliet-green: #86bc25;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
-        .container { width: 95%; max-width: 600px; background: var(--card-bg); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative; z-index: 10; }
-        .header { background: linear-gradient(135deg, var(--hoogvliet-blue), #003366); padding: 25px; text-align: center; border-bottom: 4px solid var(--hoogvliet-green); }
-        .header h1 { margin: 0; font-size: 1.8em; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container { 
+            width: 95%;
+            max-width: 700px; 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--hoogvliet-blue), #003366);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--hoogvliet-green);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
         .quiz-content { padding: 30px; }
-        #q-text { font-size: 1.1em; line-height: 1.6; margin-bottom: 20px; min-height: 120px; }
-        input[type="text"] { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1.2em; text-align: center; box-sizing: border-box; outline: none; margin: 10px 0; transition: 0.3s; }
-        input[type="text"]:focus { border-color: var(--hoogvliet-blue); background: rgba(255,255,255,0.08); }
-        #feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; line-height: 1.4; }
-        .feedback-correct { background: rgba(134, 188, 37, 0.2); border: 1px solid var(--hoogvliet-green); color: var(--hoogvliet-green); }
-        .feedback-wrong { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--error); color: #fca5a5; }
-        button { width: 100%; padding: 18px; background: var(--hoogvliet-green); color: #000; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; text-transform: uppercase; transition: 0.2s; }
-        button:hover { filter: brightness(1.1); }
-        #next-btn { background: var(--hoogvliet-blue); color: white; display: none; }
-        #result-area { display: none; text-align: center; }
+
+        #counter { color: var(--hoogvliet-green); font-weight: bold; margin-bottom: 10px; display: block; }
+
+        #q-text { font-size: 1.3em; line-height: 1.4; margin-bottom: 25px; min-height: 60px; font-weight: bold; }
+
+        .option { 
+            background: rgba(255,255,255,0.05); 
+            padding: 18px; 
+            margin: 12px 0; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+        }
+
+        .option:hover { 
+            background: rgba(255,255,255,0.1); 
+            border-color: var(--text-dim);
+            transform: translateX(5px);
+        }
+
+        .selected { 
+            background: var(--hoogvliet-blue) !important; 
+            border-color: var(--hoogvliet-green) !important;
+            box-shadow: 0 0 15px rgba(134, 188, 37, 0.3);
+        }
+
+        button { 
+            width: 100%; 
+            padding: 18px; 
+            background: var(--hoogvliet-green); 
+            color: #000; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 1.1em; 
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        button:hover { 
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #result-area { display: none; text-align: center; padding: 30px; }
+
+        .error-card { 
+            text-align: left;
+            background: rgba(0,0,0,0.2); 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 12px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .score-display { font-size: 2.5em; color: var(--hoogvliet-green); margin: 10px 0; font-weight: 800; }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.2em; }
+            .quiz-content { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header"><h1>Rekenen & Kengetallen</h1></div>
-    <div class="quiz-content">
-        <div id="quiz-area">
-            <span id="counter" style="color: var(--hoogvliet-green); font-weight: bold; display: block; margin-bottom: 10px;">VRAAG 1/10</span>
-            <div id="q-text"></div>
-            <input type="text" id="user-input" placeholder="Typ je antwoord..." autocomplete="off">
-            <div id="feedback"></div>
-            <button id="check-btn" onclick="checkAnswer()">Controleer</button>
-            <button id="next-btn" onclick="nextQuestion()">Volgende Vraag</button>
-        </div>
-
-        <div id="result-area">
-            <h2 style="font-size: 2.2em; margin-bottom: 10px;">Toets voltooid! ✨</h2>
-            <div id="final-score" style="font-size: 3em; color: var(--hoogvliet-green); margin: 20px 0; font-weight: 800;"></div>
-            <p id="grade-text" style="font-size: 1.2em; margin-bottom: 10px; color: white;"></p>
-            <p id="congrats-text" style="color: var(--text-dim); margin-bottom: 30px;"></p>
-            <button onclick="location.reload()">Opnieuw Starten</button>
-            <button onclick="window.location.href='index.html'" style="background: var(--hoogvliet-blue); color: white; margin-top: 10px;">Terug naar Home</button>
-        </div>
+    <div class="header">
+        <h1>Kostentoets & Financiën</h1>
+    </div>
+    <div id="quiz-area" class="quiz-content">
+        <span id="counter">Vraag 1/30</span>
+        <p id="q-text"></p>
+        <div id="options-area"></div>
+        <button onclick="handleNext()">Volgende Vraag</button>
+    </div>
+    <div id="result-area">
+        <h2>Toets voltooid! ✨</h2>
+        <div class="score-display"><span id="final-score"></span></div>
+        <p id="grade-text" style="font-size: 1.3em; margin-bottom: 20px; font-weight: bold;"></p>
+        <div id="error-log"></div>
+        <button onclick="location.reload()">Opnieuw Proberen</button>
+        <button onclick="window.location.href='index.html'" style="background: var(--hoogvliet-blue); color: white; margin-top: 10px;">Terug naar Home</button>
     </div>
 </div>
 
 <script>
-let questions = [];
+// Volledige database met alle 70 begrippen uit de studiefoto's
+const fullPool = [
+    {q: "Wat wordt er bedoeld met het begrip 'Aflossen'?", a: ["Terugbetalen van de schuld", "Het betalen van de rente over een lening", "Het afschrijven van een duurzaam bedrijfsmiddel"], c: 0},
+    {q: "Wat is 'Afschrijving'?", a: ["Bedrag dat het bedrijf jaarlijks reserveert om het hulp- of transportmiddel door een nieuw te kunnen vervangen", "De totale aanschafprijs van een machine in één keer", "De winst die overblijft na aftrek van inkomstenbelasting"], c: 0},
+    {q: "Wat zijn 'Afschrijvingskosten'?", a: ["Bedrag waarmee een transport- of hulpmiddel jaarlijks in waarde vermindert, gebaseerd op aankoopprijs min restwaarde", "De rente die betaald wordt over de lening voor het transportmiddel", "De onderhoudskosten en reparaties van een machine"], c: 0},
+    {q: "Wat is de 'Boekwaarde' van een bedrijfsmiddel?", a: ["Aanschafprijs minus afschrijving", "De werkelijke marktwaarde op de tweedehandsmarkt", "De vervangingswaarde gecorrigeerd voor inflatie"], c: 0},
+    {q: "Wat is 'Brutoloon'?", a: ["Loon waarover nog belasting en premies betaald moeten worden", "Het nettoloon vermeerderd met secundaire arbeidsvoorwaarden", "Het minimumloon inclusief vakantiegeld"], c: 0},
+    {q: "Wat zijn 'Complementaire kosten'?", a: ["Bijkomende kosten die nodig zijn om een duurzaam bedrijfsmiddel te laten functioneren", "De vaste huisvestingskosten van het hoofdkantoor", "De directe inkoopprijs van handelswaren"], c: 0},
+    {q: "Wat zijn 'Duurzame bedrijfsmiddelen (DBM)'?", a: ["Middelen die een bedrijf voor langere tijd kan gebruiken", "Vlottende activa zoals voorraden en debiteuren", "Kortlopende schulden aan leveranciers"], c: 0},
+    {q: "Wat is de 'Economische levensduur'?", a: ["Periode waarin het economisch verantwoord is een bedrijfsmiddel te gebruiken", "De tijd dat een machine technisch kan blijven draaien tot hij stuk is", "De vaste afschrijvingsperiode vastgesteld door de Belastingdienst"], c: 0},
+    {q: "Wat zijn 'Huisvestingskosten'?", a: ["Kosten die direct verband houden met het gebruik van een bedrijfspand", "Kosten voor de inkoop van handelswaren", "Loonkosten van het winkelpersoneel"], c: 0},
+    {q: "What is 'Interest' (of rente)?", a: ["Periodieke vergoeding voor het lenen van geld", "Een belastingheffing over bedrijfsassets", "De winstdeling voor aandeelhouders"], c: 0},
+    {q: "Wat zijn 'Kosten' in de bedrijfsvoering?", a: ["Kosten die worden gemaakt voor de bedrijfsvoering", "Uitgaven die direct worden omgezet in liquide middelen", "Alle inkomsten uit de verkoop van producten"], c: 0},
+    {q: "Wat zijn 'Kostprijsverhogende belastingen'?", a: ["Belastingen voor bedrijven die doorberekend worden in de kostprijs van de producten", "Inkomstenbelasting over de winst van de ondernemer", "Loonheffing over het personeel"], c: 0},
+    {q: "Wat wordt verstaan onder 'Levensduur'?", a: ["Periode tussen het tijdstip van aanschaf en het moment waarop het wordt vervangen of niet meer wordt gebruikt", "De periode waarin een bedrijf winstgevend is", "De economische afschrijvingstermijn"], c: 0},
+    {q: "Wat is 'Leverancierskrediet'?", a: ["Kredietvorm waarbij de leverancier van goederen het bedrijf extra tijd geeft om de geleverde goederen te betalen", "Een banklening voor de financiering van een pand", "Krediet dat klanten krijgen bij het kopen op afbetaling"], c: 0},
+    {q: "Wat is 'Lineair afschrijven'?", a: ["Manier van afschrijven waarbij het bedrag per periode gelijk is", "Afschrijven op basis van het aantal geproduceerde eenheden", "Afschrijven waarbij het bedrag elk jaar progressief lager wordt"], c: 0},
+    {q: "Wat is 'Loonheffing'?", a: ["Verzamelnaam voor loonbelasting en premies volksverzekeringen die de werknemer betaalt", "De premies die de werkgever betaalt voor de bedrijfsverzekering", "De inkomstenbelasting van de directeur-grootaandeelhouder"], c: 0},
+    {q: "Wat zijn 'Loonkosten'?", a: ["Kosten die te maken hebben met de beloning van werknemers voor hun arbeid", "De dividenduitkering aan aandeelhouders", "De huurkosten van het bedrijfspand"], c: 0},
+    {q: "Wat is het 'Minimumloon'?", a: ["Minimaal loon dat volgens de wet aan werknemers mag worden betaald", "Het gemiddelde salaris binnen een retailbranche", "Het nettoloon na aftrek van alle premies"], c: 0},
+    {q: "Wat is 'Nettoloon'?", a: ["Brutoloon min belastingen en premies voor verzekeringen", "Het loon inclusief vakantiegeld en bonussen", "De totale loonkosten inclusief werkgeverslasten"], c: 0},
+    {q: "Wat zijn 'Niet-kostprijsverhogende belastingen'?", a: ["Belastingen die niet in de kostprijs van producten worden opgenomen, zoals btw en accijnzen", "Invoerrechten en milieuheffingen op grondstoffen", "Kostprijsverhogende belastingen"], c: 0},
+    {q: "Wat zijn 'Personeelskosten'?", a: ["Kosten die direct verbonden zijn aan het in dienst hebben van personeel", "Kosten voor de inkoop van inventaris", "Reclame- en marketingkosten"], c: 0},
+    {q: "Wat is de 'Technische levensduur'?", a: ["Periode waarin een bedrijfsmiddel technisch gezien in staat is prestaties te leveren", "De periode waarin het gebruik economisch rendabel is", "De wettelijke afschrijvingstermijn"], c: 0},
+    {q: "Wat zijn 'Uitgaven'?", a: ["Geld dat echt door het bedrijf betaald wordt", "Alle gemaakte kosten in een periode", "De totale opbrengsten van de omzet"], c: 0},
+    {q: "Wat zijn 'Verspillingen'?", a: ["Niet noodzakelijke kosten", "Noodzakelijke investeringen in duurzame bedrijfsmiddelen", "Proportioneel variabele kosten"], c: 0},
+    {q: "Wat zijn 'Voorraadkosten'?", a: ["Kosten die het gevolg zijn van het houden van voorraden", "Transportkosten van de leverancier naar het DC", "Productiekosten van de fabrikant"], c: 0},
+    {q: "Wat is het 'Bedrijfsresultaat'?", a: ["Exploitatiekosten min het brutoresultaat", "De totale omzet min de inkoopwaarde", "Het eigen vermogen vermeerderd met de winst"], c: 0},
+    {q: "Wat is het 'Economisch resultaat'?", a: ["Beloning voor het risico dat een ondernemer loopt voor het hebben van een bedrijf", "De wettelijke rente over banktegoeden", "Het brutoloon van de directeur"], c: 0},
+    {q: "Wat is 'Eigen vermogen'?", a: ["Vermogen dat wordt gevormd door de middelen die door een ondernemer zelf in zijn bedrijf zijn ingebracht", "Alle schulden bij leveranciers en banken", "Het vreemd vermogen op de balans"], c: 0},
+    {q: "Wat is een 'Fee'?", a: ["Afgesproken vergoeding voor het leveren van een bepaalde dienst", "Een vaste rentevergoeding op een lening", "Een boete wegens te late betaling"], c: 0},
+    {q: "Wat zijn 'Fiscale kosten'?", a: ["Kosten die echt nodig zijn om als onderneming te kunnen draaien en de kosten die rechtstreeks met de onderneming te maken hebben", "Niet-fiscale kosten die privé worden gemaakt", "Incidentele lasten"], c: 0},
+    {q: "Wat is 'Fiscale winst'?", a: ["Winst waarover een onderneming belasting moet betalen", "De nettowinst na aftrek van alle privé-onkosten", "Het bedrijfsresultaat voor aftrek van rente"], c: 0},
+    {q: "Wat is een 'Gebroken boekjaar'?", a: ["Administratie hebben over een periode anders dan een kalenderjaar", "Een boekjaar dat abrupt wordt afgebroken door een faillissement", "Een kalenderjaar van 1 januari tot 31 december"], c: 0},
+    {q: "Wat is 'Gewaardeerd loon'?", a: ["Bedrag dat de ondernemer in een vergelijkbare functie zou verdienen in een andere organisatie", "Het daadwerkelijke nettoloon dat de ondernemer zichzelf uitkeert", "Het minimumloon voor medewerkers"], c: 0},
+    {q: "Wat is 'Gewaardeerd rendement eigen vermogen'?", a: ["Winst van het geïnvesteerd eigen vermogen", "De rente op een zakelijke bankrekening", "Het dividend van externe aandeelhouders"], c: 0},
+    {q: "Wat is 'Gewaardeerde interest'?", a: ["Rente die de ondernemer zou ontvangen als hij zijn eigen vermogen niet in de onderneming had geïnvesteerd, maar bij een bank had weggezet", "De rente betaald over het vreemd vermogen", "Het gewaardeerd loon van de ondernemer"], c: 0},
+    {q: "Wat zijn 'Incidentele baten'?", a: ["Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verhogen", "De reguliere netto-omzet uit de winkelverkoop", "Structurele subsidies van de overheid"], c: 0},
+    {q: "Wat zijn 'Incidentele lasten'?", a: ["Resultaten die niet uit de normale bedrijfsvoering zijn voortgekomen en het nettoresultaat verlagen", "Reguliere bedrijfskosten zoals huur en loon", "Reguliere inkoopkosten van handelswaren"], c: 0},
+    {q: "Wat is 'Inkomstenbelasting'?", a: ["Belasting over het totale inkomen van iedere natuurlijke persoon in Nederland of met binnenlands inkomen", "Vennootschapsbelasting voor BV's", "Omzetbelasting over de verkoop"], c: 0},
+    {q: "Wat is 'Netto-omzet'?", a: ["Omzet exclusief btw", "Omzet inclusief btw en accijnzen", "De brutowinst van de onderneming"], c: 0},
+    {q: "Wat is 'Nettoverlies'?", a: ["Negatief bedrijfsresultaat", "Positief bedrijfsresultaat", "Het totale vreemd vermogen"], c: 0},
+    {q: "Wat is 'Nettowinst'?", a: ["Positief bedrijfsresultaat", "Negatief bedrijfsresultaat", "De totale omzet minus inkoopwaarde"], c: 0},
+    {q: "Wat zijn 'Niet-fiscale kosten'?", a: ["Kosten die niet voor de onderneming zijn gemaakt", "Fiscale kosten die direct zakelijk aftrekbaar zijn", "Afschrijvingskosten van bedrijfsmiddelen"], c: 0},
+    {q: "Wat zijn 'Ontvangsten'?", a: ["Geld dat echt binnenkomt als liquide middel", "Alle gerealiseerde omzet op rekening", "De totale winst in een boekjaar"], c: 0},
+    {q: "Wat is de 'Bezettingsgraad'?", a: ["Mate waarin bedrijf gebruikmaakt van de beschikbare capaciteit", "De verhouding tussen vaste en variabele kosten", "Het percentage winst op de netto-omzet"], c: 0},
+    {q: "Wat is het 'Bezettingsresultaat'?", a: ["Verschil tussen de totale constante kosten in een periode en de in de prijs opgenomen constante kosten", "Het resultaat uit de inkoop en verkoop van goederen", "De totale winst minus de belasting"], c: 0},
+    {q: "Wat is een 'Bezettingsverlies'?", a: ["Verlies dat ontstaat doordat er minder constante kosten zijn verrekend dan begroot", "Verlies door winkeldiefstal en derving", "Winst door een hoge omzetsnelheid"], c: 0},
+    {q: "Wat is 'Bezettingswinst'?", a: ["Winst die ontstaat doordat er meer constante kosten zijn verrekend dan begroot", "Winst door een verlaagd BTW-tarief", "Winst door inkoopkortingen"], c: 0},
+    {q: "Wat is de 'Break-evenafzet'?", a: ["Aantal artikelen dat een bedrijf moet verkopen om de kosten terug te verdienen", "Het aantal artikelen dat nodig is voor de maximale productiecapaciteit", "De omzet waarbij de winst maximaal is"], c: 0},
+    {q: "Wat is een 'Break-evenanalyse'?", a: ["Hulpmiddel om de relatie tussen vaste en variabele kosten en opbrengsten te bestuderen", "Een analyse van de personeelsbezetting in de winkel", "Een berekening van de economische voorraad"], c: 0},
+    {q: "Wat is de 'Break-evenomzet'?", a: ["Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", "De omzet die leidt tot het maximale bedrijfsresultaat", "De omzet exclusief alle variabele kosten"], c: 0},
+    {q: "Wat is het 'Break-evenpunt'?", a: ["Punt waarbij de totale opbrengsten gelijk zijn aan de totale kosten, en de winst dus nul is", "Het punt waarop de capaciteitsgrens wordt bereikt", "Het moment waarop de inkoopwaarde gelijk is aan de brutowinst"], c: 0},
+    {q: "Wat is de 'Capaciteitsgrens'?", a: ["Maximale omzet of productie die je met de inzet van alle beschikbare bedrijfsmiddelen en personeel kunt bereiken", "Het minimale bestelpunt van de voorraad", "De break-evenomzet van het bedrijf"], c: 0},
+    {q: "Wat zijn 'Capaciteitskosten'?", a: ["Kosten die niet afhankelijk zijn van de omzet", "Proportioneel variabele kosten van de inkoop", "Directe loonkosten per product"], c: 0},
+    {q: "Wat is de 'Commerciële kostprijs'?", a: ["Fabricagekostprijs en de verkoopkosten samen", "De inkoopprijs exclusief transportkosten", "De integrale kostprijs inclusief btw"], c: 0},
+    {q: "Wat zijn 'Constante kosten'?", a: ["Kosten die niet afhankelijk zijn van de omzet", "Kosten die stijgen bij elke verkochte eenheid", "Variabele inkoopkosten"], c: 0},
+    {q: "Wat is het 'Constante kostentarief'?", a: ["Deel van de omzet dat nodig is om de constante kosten terug te verdienen", "Het tarief van de vennootschapsbelasting", "De winstmarge per product"], c: 0},
+    {q: "Wat is de 'Contributiemarge'?", a: ["Bedrag dat per product bijdraagt aan de dekking van de constante kosten en de winst", "De totale belastingdruk over de winst", "De inkoopprijs van de goederen"], c: 0},
+    {q: "Wat zijn 'Degressief variabele kosten'?", a: ["Variabele kosten die minder dan gelijk stijgen bij een toename van de netto-omzet", "Variabele kosten die sneller stijgen dan de omzet", "Constante kosten die vast blijven"], c: 0},
+    {q: "Wat is de 'Dekkingsbijdrage'?", a: ["Verschil tussen de verkoopprijs en de variabele kosten per stuk", "Het verschil tussen de brutowinst en de nettowinst", "De som van constante en variabele kosten"], c: 0},
+    {q: "Wat is de 'Fabricagekostprijs'?", a: ["Alle kosten die nodig zijn om een product te maken", "De verkoopkosten en administratiekosten samen", "De consumentenomzet inclusief btw"], c: 0},
+    {q: "Wat is de 'Integrale kostprijs'?", a: ["Som van de constante en variabele kosten per product", "Alleen de variabele kosten per product", "Alleen de constante kosten per product"], c: 0},
+    {q: "Wat is de 'Integrale kostprijsmethode'?", a: ["Methode om de kostprijs van een product te berekenen waarbij constante en variabele kosten zijn inbegrepen", "Methode waarbij alleen variabele kosten worden toegerekend", "Methode voor het berekenen van de netto-omzet"], c: 0},
+    {q: "Wat is de 'Kostprijs'?", a: ["Som van de totale kosten per product", "De verkoopprijs inclusief winstopslag en btw", "De inkoopprijs van de leverancier"], c: 0},
+    {q: "Wat is de 'Kritische omzet'?", a: ["Netto-omzet die een bedrijf moet maken om geen verlies te lijden en geen winst te maken", "De maximale omzet binnen de capaciteitsgrens", "De omzet behaald door eigen personeel"], c: 0},
+    {q: "Wat is de 'Normatieve omzet'?", a: ["Normale omzet, omzet volgens norm", "De werkelijk gerealiseerde omzet op zaterdag", "De break-evenomzet"], c: 0},
+    {q: "Wat zijn 'Overheadkosten'?", a: ["Kosten die een bedrijf moet maken voor de bedrijfsvoering", "Directe materiaalkosten voor de productie", "Inkoopkosten van handelswaren"], c: 0},
+    {q: "Wat zijn 'Progressief variabele kosten'?", a: ["Variabele kosten die meer dan gelijk stijgen met de toename van de netto-omzet", "Variabele kosten die dalen bij een stijgende omzet", "Constante kosten die niet veranderen"], c: 0},
+    {q: "Wat zijn 'Proportioneel variabele kosten'?", a: ["Variabele kosten die gelijk met de omzet stijgen", "Kosten die volledig onafhankelijk zijn van de omzet", "Kosten die dalen bij een stijgende omzet"], c: 0},
+    {q: "Wat zijn 'Variabele kosten'?", a: ["Kosten die afhankelijk zijn van de netto-omzet", "Vaste huisvestingskosten en afschrijvingen", "Kosten die nooit veranderen ongeacht de omzet"], c: 0},
+    {q: "Wat is de 'Veiligheidsmarge'?", a: ["Percentage dat aangeeft hoeveel de werkelijk gerealiseerde netto-omzet of productie nog kan dalen voordat een onderneming verlies lijdt", "De extra voorraad in het magazijn voor levertijden", "De winstmarge per verkocht product"]
+];
+
+let selected = [];
 let cur = 0;
 let score = 0;
+let errors = [];
+let choice = null;
+
+function start() {
+    selected = [...fullPool].sort(() => 0.5 - Math.random()).slice(0, 30);
+    cur = 0; score = 0; errors = [];
+    document.getElementById("quiz-area").style.display = "block";
+    document.getElementById("result-area").style.display = "none";
+    show();
+}
+
+function show() {
+    choice = null;
+    const qData = selected[cur];
+    
+    let options = qData.a.map((text, index) => ({ text, index }));
+    options.sort(() => 0.5 - Math.random());
+
+    document.getElementById("counter").innerText = "Vraag " + (cur + 1) + "/30";
+    document.getElementById("q-text").innerText = qData.q;
+    
+    const optArea = document.getElementById("options-area");
+    optArea.innerHTML = "";
+    
+    options.forEach((opt) => {
+        const d = document.createElement("div");
+        d.className = "option";
+        d.innerText = opt.text;
+        d.onclick = () => {
+            document.querySelectorAll(".option").forEach(e => e.className = "option");
+            d.className = "option selected";
+            choice = opt.index;
+        };
+        optArea.appendChild(d);
+    });
+}
+
+function handleNext() {
+    if (choice === null) return alert("Selecteer een antwoord!");
+    if (choice === selected[cur].c) {
+        score++;
+    } else {
+        errors.push({
+            q: selected[cur].q, 
+            u: selected[cur].a[choice], 
+            c: selected[cur].a[selected[cur].c]
+        });
+    }
+    
+    cur++;
+    if (cur < 30) show();
+    else end();
+}
 
 function triggerFeest() {
     confetti({
@@ -71,230 +286,37 @@ function triggerFeest() {
     });
 }
 
-function generateQuestions() {
-    // 1. Bestelpunt Casus Generator
-    const typeBP = () => {
-        const lt = Math.floor(Math.random() * 3) + 1; 
-        const da = Math.floor(Math.random() * 74) + 7; 
-        const vv = Math.floor(Math.random() * 46) + 5; 
-        const bp = (lt * da) + vv; 
-
-        const namen = ["Daan", "Lisa", "Kevin", "Sarah", "Mohammed", "Amber"];
-        const manager = namen[Math.floor(Math.random() * namen.length)];
-        const producten = ["kratten bier", "pakken halfvolle melk", "potten pastasaus", "stuks brood", "potten pindakaas"];
-        const product = producten[Math.floor(Math.random() * producten.length)];
-
-        const variant = Math.floor(Math.random() * 4);
-        if (variant === 0) {
-            return {
-                q: `<b>Casus Bestelmanagement:</b><br><br>${manager} is de voorraad van de vulploeg aan het controleren. De winkel verkoopt gemiddeld <b>${da} ${product} per dag</b>. Het distributiecentrum heeft <b>${lt} dagen</b> nodig om een nieuwe bestelling te leveren. Om te voorkomen dat het schap leegraakt bij vertraging, houdt de supermarkt een minimale veiligheidsvoorraad aan van <b>${vv} stuks</b>.<br><br>Bij welke voorraadhoogte (het Bestelpunt) moet ${manager} de handterminal pakken om een nieuwe bestelling te plaatsen?`,
-                c: bp,
-                exp: `Uitleg: Bestelpunt = (Levertijd × Dagafzet) + Veiligheidsvoorraad<br>(${lt} × ${da}) + ${vv} = ${bp} stuks.`
-            };
-        } else if (variant === 1) {
-            return {
-                q: `<b>Casus Veiligheidsvoorraad:</b><br><br>Op de afdeling kruidenierswaren is het automatische bestelsysteem (AVV) ingesteld op een bestelpunt of drempelwaarde van <b>${bp} ${product}</b>. Afdelingsmanager ${manager} weet dat de vrachtwagen er altijd exact <b>${lt} dagen</b> over doet om de bestelling te leveren. De gemiddelde dagelijkse verkoop van dit product is <b>${da} stuks</b>.<br><br>Hoeveel stuks heeft de supermarkt als extra veiligheidsvoorraad (VV) in het systeem staan?`,
-                c: vv,
-                exp: `Uitleg: Veiligheidsvoorraad = Bestelpunt - (Levertijd × Dagafzet)<br>${bp} - (${lt} × ${da}) = ${vv} stuks.`
-            };
-        } else if (variant === 2) {
-            return {
-                q: `<b>Casus Schapverkoop:</b><br><br>Teamleider ${manager} ziet in de computer dat het bestelpunt voor ${product} hard is ingesteld op <b>${bp} stuks</b>. De vaste veiligheidsvoorraad in het magazijn is <b>${vv} stuks</b>. Als er een bestelling naar het distributiecentrum wordt gestuurd, duurt het <b>${lt} dagen</b> voordat de vulploeg de rolcontainers kan uitpakken.<br><br>Wat is de gemiddelde dagafzet (DA) van dit product in de winkel?`,
-                c: da,
-                exp: `Uitleg: Dagafzet = (Bestelpunt - Veiligheidsvoorraad) / Levertijd<br>(${bp} - ${vv}) / ${lt} = ${da} stuks per dag.`
-            };
-        } else {
-            return {
-                q: `<b>Casus Logistieke Keten:</b><br><br>In de supermarkt is er een probleem met de levering van de ${product}. Het bestelpunt staat scherp afgesteld op <b>${bp} stuks</b>, gebaseerd op een dagafzet van <b>${da} stuks</b> en een ijzeren voorraad (veiligheidsvoorraad) van <b>${vv} stuks</b>.<br><br>Hoeveel dagen levertijd (LT) heeft het distributiecentrum volgens deze instellingen nodig om de goederen in de winkel te krijgen?`,
-                c: lt,
-                exp: `Uitleg: Levertijd = (Bestelpunt - Veiligheidsvoorraad) / Dagafzet<br>(${bp} - ${vv}) / ${da} = ${lt} dagen.`
-            };
-        }
-    };
-
-    // 2. Netto Omzet en BTW Casus Generator
-    const typeNO = () => {
-        const btwPercentage = Math.random() < 0.5 ? 9 : 21;
-        const netto = Math.floor(Math.random() * 81 + 10) * 100;
-        const btwBedrag = netto * (btwPercentage / 100);
-        const consumentenomzet = netto + btwBedrag;
-        const variant = Math.random() < 0.5;
-        
-        const afd = btwPercentage === 9 ? "Vers & Agf (9% BTW)" : "Slijterij & Cosmetica (21% BTW)";
-
-        if (variant) {
-            return {
-                q: `<b>Casus Financiële Dagsluiting:</b><br><br>Bij het opmaken van de kassa's op zaterdagavond ziet de hoofdcassière dat er op de afdeling <b>${afd}</b> een totale bruto-omzet is geregistreerd van <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b> via de pin en contanten (consumentenomzet).<br><br>Welk bedrag aan Netto-omzet houdt de supermarkt over voor deze afdeling als de BTW eraf is gehaald?`,
-                c: netto,
-                exp: `Uitleg: Netto-omzet = Consumentenomzet / (1 + (BTW-percentage / 100))<br>€${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}`
-            };
-        } else {
-            return {
-                q: `<b>Casus BTW-Afdracht:</b><br><br>De supermarkt moet de wekelijkse belastingaangifte voorbereiden. De kasregisters tonen voor de productgroep <b>${afd}</b> een bruto consumentenomzet van <b>€${consumentenomzet.toFixed(2).replace('.', ',')}</b>.<br><br>Hoeveel euro van dit bedrag moet de supermarkt als BTW afdragen aan de Belastingdienst?`,
-                c: btwBedrag.toFixed(2),
-                exp: `Uitleg: Netto-omzet is €${consumentenomzet.toFixed(2).replace('.', ',')} / 1,${btwPercentage < 10 ? '0' + btwPercentage : btwPercentage} = €${netto}.<br>Het BTW-bedrag is het verschil: €${consumentenomzet.toFixed(2).replace('.', ',')} - €${netto} = €${btwBedrag.toFixed(2).replace('.', ',')}`
-            };
-        }
-    };
-
-    // 3. Economische Voorraad Casus Generator
-    const typeEV = () => {
-        const tv = Math.floor(Math.random() * 500) + 200; 
-        const bo = Math.floor(Math.random() * 100) + 20; 
-        const vl = Math.floor(Math.random() * 50) + 10; 
-        const ans = tv + bo - vl;
-        
-        const namen = ["Tim", "Eva", "Sven", "Sophie"];
-        const manager = namen[Math.floor(Math.random() * namen.length)];
-
-        return { 
-            q: `<b>Casus Voorraadpositie:</b><br><br>Assistent-bedrijfsleider ${manager} doet de administratieve voorraadcontrole voor de diepvriesafdeling. In de computer staat dat er fysiek <b>${tv} dozen</b> in het magazijn en de vriesmeubels liggen (technische voorraad). Er is gisteren een bestelling geplaatst bij het DC voor <b>${bo} dozen</b> die momenteel onderweg is. Tegelijkertijd hebben klanten via de webshop al <b>${vl} dozen</b> gereserveerd en betaald, welke vanmiddag worden opgehaald.<br><br>Wat is de Economische Voorraad (EV) waar ${manager} rekening mee moet houden voor de commerciële planning?`, 
-            c: ans, 
-            exp: `Uitleg: Economische Voorraad = Technische voorraad + Bestelde goederen - Verkochte/Gereserveerde goederen<br>${tv} + ${bo} - ${vl} = ${ans} dozen.` 
-        };
-    };
-
-    // 4. Servicegraad Casus Generator
-    const typeSG = () => {
-        const tot = Math.floor(Math.random() * 1100) + 400;
-        const lev = Math.floor(tot * (Math.random() * 0.15 + 0.82));
-        const gemist = tot - lev;
-        const res = (lev / tot) * 100;
-        const ans = Number.isInteger(res) ? res : res.toFixed(1);
-
-        const afdelingen = ["de versafdeling", "de droge kruidenierswaren", "de non-food afdeling", "de zuivel"];
-        const afd = afdelingen[Math.floor(Math.random() * afdelingen.length)];
-
-        return { 
-            q: `<b>Casus Klanttevredenheid & OOS:</b><br><br>Tijdens een service-audit op <b>${afd}</b> wordt gekeken naar de Out-Of-Stock (OOS) meldingen. In totaal kwamen er gedurende de dag vragen binnen naar <b>${tot} specifieke artikelen</b>. De vulploeg heeft <b>${lev} keer</b> het product direct uit het schap of magazijn aan de klant kunnen overhandigen. Bij de overige <b>${gemist} artikelen</b> moesten ze de klant helaas teleurstellen (nee-verkoop).<br><br>Bereken de servicegraad (SG) van deze afdeling in procenten. <i>(Rond indien nodig af op 1 decimaal)</i>`, 
-            c: ans, 
-            exp: `Uitleg: Servicegraad = (Direct leverbare artikelen / Totaal gevraagde artikelen) × 100%<br>(${lev} / ${tot}) × 100% = ${ans}%.` 
-        };
-    };
-
-    // 5. Omzetsnelheid Generator
-    const typeOS = () => {
-        const omzet = (Math.floor(Math.random() * 50) + 10) * 100, gv = (Math.floor(Math.random() * 5) + 2) * 100;
-        const res = omzet / gv;
-        const ans = Number.isInteger(res) ? res : res.toFixed(1);
-        return { q: `<b>Bereken de Omzetsnelheid:</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>Netto-omzet: €${omzet}<br>Gemiddelde voorraad: €${gv}`, c: ans, exp: `Uitleg: €${omzet} / €${gv} = ${ans}` };
-    };
-
-    // 6. Omzetduur Generator
-    const typeOD = () => {
-        const os = (Math.random() * 4 + 4).toFixed(1);
-        const ans = Math.round(360 / os);
-        return { q: `<b>Bereken de Omzetduur in dagen:</b><br><br>De omzetsnelheid is ${os}.<br>(Gebruik 360 dagen)`, c: ans, exp: `Uitleg: 360 / ${os} = ${ans} dagen` };
-    };
-
-    // 7. Gemiddelde voorraad (2 punten)
-    const typeGV2 = () => {
-        const b = Math.floor(Math.random() * 1000) + 500, e = Math.floor(Math.random() * 1000) + 500;
-        const ans = (b + e) / 2;
-        return { q: `<b>Bereken de Gemiddelde Voorraad (2 punten):</b><br><br>Beginvoorraad: ${b}<br>Eindvoorraad: ${e}`, c: ans, exp: `Uitleg: (${b} + ${e}) / 2 = ${ans}` };
-    };
-
-    // 8. Gemiddelde voorraad (X maanden)
-    const typeGV3 = () => {
-        const mnd = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
-        const amt = Math.floor(Math.random() * 3) + 3;
-        const start = Math.floor(Math.random() * (mnd.length - amt + 1));
-        let lijst = [], som = 0, tekst = "";
-        
-        for (let i = 0; i < amt; i++) {
-            const w = Math.floor(Math.random() * 400) + 600;
-            const nm = mnd[start + i];
-            lijst.push(w);
-            som += (i === 0 || i === amt - 1) ? 0.5 * w : w;
-            tekst += `${nm}: ${w}<br>`;
-        }
-        
-        const deler = amt - 1;
-        const res = som / deler;
-        const ans = Number.isInteger(res) ? res : res.toFixed(1);
-
-        return { 
-            q: `<b>Bereken de Gemiddelde Voorraad (${amt} maanden):</b><br><i>(Indien nodig afronden op 1 decimaal)</i><br><br>${tekst}`, 
-            c: ans, 
-            exp: `Uitleg: (0,5 × ${lijst[0]} + tussenliggende maanden + 0,5 × ${lijst[lijst.length-1]}) / ${deler} = ${ans}` 
-        };
-    };
-
-    // De complete evenwichtige mix van 10 vragen
-    let pool = [
-        typeBP(), typeBP(), 
-        typeNO(), typeNO(), 
-        typeOS(), 
-        typeOD(), 
-        typeSG(), 
-        typeEV(), 
-        typeGV2(), 
-        typeGV3()
-    ];
-    questions = pool.sort(() => 0.5 - Math.random());
-}
-
-function show() {
-    const q = questions[cur];
-    document.getElementById("counter").innerText = `VRAAG ${cur + 1}/10`;
-    document.getElementById("q-text").innerHTML = q.q;
-    document.getElementById("user-input").value = "";
-    document.getElementById("user-input").disabled = false;
-    document.getElementById("feedback").style.display = "none";
-    document.getElementById("check-btn").style.display = "block";
-    document.getElementById("next-btn").style.display = "none";
-    setTimeout(() => document.getElementById("user-input").focus(), 10);
-}
-
-function checkAnswer() {
-    // Stripped nu automatisch ook eurotekens en corrigeert komma's naar punten
-    const val = document.getElementById("user-input").value.replace(',', '.').replace('%', '').replace('€', '').trim();
-    if (val === "") return;
-    const q = questions[cur];
-    document.getElementById("user-input").disabled = true;
-    document.getElementById("check-btn").style.display = "none";
-    document.getElementById("next-btn").style.display = "block";
-    const fb = document.getElementById("feedback");
-    fb.style.display = "block";
-
-    if (parseFloat(val) == parseFloat(q.c)) {
-        score++;
-        fb.className = "feedback-correct";
-        fb.innerHTML = "<b>Lekker gewerkt!</b> Dit is het juiste antwoord.";
-    } else {
-        fb.className = "feedback-wrong";
-        fb.innerHTML = `<b>Helaas!</b> Het juiste antwoord was <b>€${q.c.toString().replace('.', ',')}</b>.<br><br>${q.exp}`;
-    }
-}
-
-function nextQuestion() {
-    cur++;
-    if (cur < 10) show();
-    else end();
-}
-
 function end() {
     document.getElementById("quiz-area").style.display = "none";
     document.getElementById("result-area").style.display = "block";
-    document.getElementById("final-score").innerText = `${score} / 10`;
     
-    let grade = (score / 10) * 10;
+    document.getElementById("final-score").innerText = score + "/30";
+    
+    let grade = (score / 30) * 10;
     document.getElementById("grade-text").innerText = "Je cijfer is een: " + grade.toFixed(1);
-    document.getElementById("congrats-text").innerText = score >= 6 ? "Gefeliciteerd! Je hebt een voldoende en bent klaar voor het examen." : "Nog even oefenen met de formules, je komt er wel!";
-    
-    if (score >= 6) {
+
+    if (score >= 17) {
         triggerFeest();
+    }
+
+    const log = document.getElementById("error-log");
+    log.innerHTML = "";
+    if (errors.length > 0) {
+        log.innerHTML = "<h3>Verbeterpunten:</h3>";
+        errors.forEach(e => {
+            log.innerHTML += `
+                <div class="error-card">
+                    <b>${e.q}</b><br>
+                    <span style="color:#f87171">Jouw antwoord: ${e.u}</span><br>
+                    <span style="color:#86bc25">Juist: ${e.c}</span>
+                </div>`;
+        });
+    } else {
+        log.innerHTML = "<p style='color: var(--hoogvliet-green); font-weight: bold;'>Gefeliciteerd! Alle vragen in één keer goed!</p>";
     }
 }
 
-generateQuestions();
-show();
-
-document.getElementById("user-input").onkeypress = (e) => { 
-    if(e.key === "Enter") {
-        document.getElementById("check-btn").style.display !== "none" ? checkAnswer() : nextQuestion();
-    }
-};
+start();
 </script>
 </body>
 </html>
